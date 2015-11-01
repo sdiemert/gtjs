@@ -42,7 +42,6 @@ export class GraphFactory {
 
         var newGraph:g.Graph = new g.Graph({name: name});
 
-
         var tmpNode:en.Node = null;
         var tmpEdge:en.Node = null;
 
@@ -83,11 +82,6 @@ export class GraphFactory {
     private copyNode(n:en.Node):en.Node {
         var newNode:en.Node = new en.Node(n.getValue());
         return newNode;
-    }
-
-    private copyEdge(e:en.Edge):en.Edge {
-        var newEdge:en.Edge = new en.Edge(e.getValue(), e.getEnd1(), e.getEnd2(), e.getDirection());
-        return newEdge;
     }
 
 }
