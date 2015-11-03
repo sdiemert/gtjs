@@ -6,6 +6,13 @@ import Entities = require("./Entities");
 import util = require('util');
 import gf = require('./GraphFactory');
 
+function choose(n, k) {
+    if (k === 0) {
+        return 1;
+    }
+    return (n * choose(n - 1, k - 1)) / k
+}
+
 export class Graph extends Entities.Entity {
 
     private vertexSet:Array<Entities.Node> = [];
@@ -164,6 +171,46 @@ export class Graph extends Entities.Entity {
 
     }
 
+
+    /**
+     * Makes an induced sub-graph based on the vertices that are passed in.
+     * Returns the induced graph.
+     * @param vertices
+     */
+    public inducedGraph(vertices: Array<number>) : Graph{
+
+        vertices;
+
+        var f : gf.GraphFactory = new gf.GraphFactory();
+        var g = f.makeCopy(this);
+
+        var toRemove = [];
+
+        var num = g.getVertices().length;
+
+        for(var v = 0; v < num; v++){
+
+            if(vertices.indexOf(v) === -1){
+
+                toRemove.push(v);
+            }
+
+        }
+
+        console.log(toRemove);
+
+        toRemove.sort();
+
+        for(var r = toRemove.length - 1; r >= 0; r--){
+
+            g.removeNode(r);
+
+        }
+
+        return g;
+
+    }
+
     public isoMorphic(g:Graph):boolean {
 
         //console.log(this.repAsMatrix());
@@ -193,7 +240,11 @@ export class Graph extends Entities.Entity {
 
                 //check that the degrees of nodes being removed are equivalent
 
+                //TODO: other comparisons here....
+
                 if(graphA.getDegree(i) !== graphB.getDegree(j)){
+                    delete graphA;
+                    delete graphB;
                     continue;
                 }
 
@@ -201,10 +252,21 @@ export class Graph extends Entities.Entity {
                 graphB.removeNode(j);
 
                 if(graphB.isoMorphic(graphA)){
+                    delete graphA;
+                    delete graphB;
                     return true;
                 }
             }
         }
+
+        return false;
+    }
+
+
+
+    public hasSubGraph(H : Graph):boolean{
+
+
 
         return false;
     }

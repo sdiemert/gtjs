@@ -23,6 +23,7 @@ var adj2 = {
     4: [1,2],
 
 };
+``
 import entities = require("./Entities");
 import graph = require("./Graph");
 import graphFactory = require("./GraphFactory");
@@ -32,4 +33,7 @@ var gf = new graphFactory.GraphFactory();
 var g = gf.newGraphFromAdjList(adj, "G");
 var g2 = gf.newGraphFromAdjList(adj2, "G2");
 
-console.log(g.isoMorphic(g2));
+console.log(g.repAsMatrix());
+
+console.log(g.inducedGraph([0,1]).repAsMatrix());
+
