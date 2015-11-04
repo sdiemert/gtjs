@@ -36,6 +36,7 @@ export class Graph extends Entities.Entity {
 
         this.vertexSet.push(n);
         return this.vertexSet.length - 1;
+
     }
 
     public removeNode(i:number):boolean {
