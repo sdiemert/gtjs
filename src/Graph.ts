@@ -215,10 +215,6 @@ export class Graph extends Entities.Entity {
 
     public isoMorphic(g:Graph):boolean {
 
-        console.log("----");
-        console.log(this.repAsMatrix());
-        console.log(g.repAsMatrix());
-
         if(
             g.getVertices().length !== this.getVertices().length ||
             g.getEdges().length !== this.getEdges().length
@@ -312,22 +308,13 @@ export class Graph extends Entities.Entity {
             return c++;
         });
 
-        console.log(H);
-
         var S = this.getSubsets(H.getSize(), X);
 
         var tmp : Graph;
 
-        console.log(util.inspect(S));
-
-
         for(var s in S){
 
             tmp = this.inducedGraph(S[s]);
-
-            console.log(this.repAsMatrix());
-            console.log(S[s]);
-            console.log(tmp.repAsMatrix());
 
             if(H.isoMorphic(tmp)){
 

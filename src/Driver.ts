@@ -28,7 +28,7 @@ var adj2 = {
     0: [2,3],
     1: [3,4],
     2: [0,4],
-    3: [3,1],
+    3: [0,1],
     4: [1,2]
 
 };
@@ -36,21 +36,33 @@ var adj2 = {
 import entities = require("./Entities");
 import graph = require("./Graph");
 import graphFactory = require("./GraphFactory");
+import r = require("./Rule");
 
 var gf = new graphFactory.GraphFactory();
+
 
 var g = gf.newGraphFromAdjList(adj, "G");
 var g2 = gf.newGraphFromAdjList(adj2, "G2");
 
+var r1 = new r.Rule(g, function(h : graph.Graph, m : Array<number>){
 
-var x = g2.hasSubGraph(g);
+    h.removeNode(m[m.length - 1]);
+
+    return h;
+
+});
 
 console.log(g2.repAsMatrix());
-console.log(g.repAsMatrix());
 
+var x = r1.tryRule(g2);
+
+while(x){
+
+    console.log(g2.repAsMatrix());
+
+    x = r1.tryRule(g2);
+
+}
 console.log();
-console.log(x);
-
-console.log(g2.inducedGraph(x).repAsMatrix());
 
 
