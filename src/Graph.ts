@@ -231,9 +231,13 @@ export class Graph extends Entities.Entity {
     public isoMorphic(g:Graph):boolean {
 
         if (
-            g.getVertices().length !== this.getVertices().length ||
-            g.getEdges().length !== this.getEdges().length
+            g.getVertices().length !== this.getVertices().length
+
         ) {
+            return false;
+        }
+
+        if(g.getEdges().length !== this.getEdges().length){
             return false;
         }
 

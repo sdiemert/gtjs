@@ -5,7 +5,7 @@
     <title>Some Graphs</title>
 
     <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script src="../bin/require.js"></script>
+    <script src="require.js"></script>
     <link rel='stylesheet' href="vis.min.css"/>
 
     <style type="text/css">
@@ -40,8 +40,6 @@
 
                 var a = A.adapt(toShow);
 
-                console.log(a);
-
                 var nodes = new vis.DataSet(a.nodes);
                 var edges = new vis.DataSet(a.edges);
                 var container = document.getElementById(id);
@@ -55,19 +53,18 @@
 
             var adj2 = {
 
-                0: [2,3],
-                1: [3,4],
-                2: [0,4],
-                3: [0,1],
-                4: [1,2]
+                0: [1],
+                1: [2],
+                2: [3],
+                3: [4],
+                4: [0]
 
             };
 
             var adj = {
 
                 0: [1],
-                1: [0,2],
-                2: [1]
+                1: []
 
             };
 
@@ -102,9 +99,6 @@
 
                 }
 
-                console.log("Finished R2");
-                console.log(host.asMatrix());
-
                 return host;
 
             });
@@ -113,7 +107,6 @@
             r2.tryRule(H);
             r2.tryRule(H);
             r2.tryRule(H);
-           // R = r1.tryRule(H);
 
             showGraph("viz-3", H);
 
