@@ -32,15 +32,16 @@ export class Rule{
      */
     public tryRule(host : g.Graph):g.Graph{
 
-        var N : Array<number> = host.hasSubGraph(this.matchGraph);
+        var N : Array<Array<number>> = host.hasSubGraph(this.matchGraph);
 
-        if(!N){
+        if(!N || N.length === 0){
 
             return null;
 
         }else{
 
-            return this.callback(host, N);
+            var x = Math.floor(Math.random() * (N.length - 1));
+            return this.callback(host, N[x]);
 
         }
 

@@ -216,7 +216,11 @@ export class Graph extends Entities.Entity {
 
         }
 
-        toRemove.sort().reverse();
+        toRemove.sort(function(x,y){
+            return x - y;
+        });
+
+        toRemove.reverse();
 
         for (var r = 0; r < toRemove.length; r++) {
 
@@ -246,8 +250,8 @@ export class Graph extends Entities.Entity {
         }
 
         var factory = new gf.GraphFactory();
-        var graphA = null;
-        var graphB = null;
+        var graphA : Graph = null;
+        var graphB : Graph = null;
 
         for (var i = 0; i < this.getVertices().length; i++) {
 
@@ -284,7 +288,7 @@ export class Graph extends Entities.Entity {
     private getSubsets(size:number, L:Array<number>):Array<Array<number>> {
 
         var toReturn:Array<Array<number>> = [];
-        var X:Array<number> = [];
+        var X:Array<Array<number>> = [];
 
 
         // base case: size = 1;
@@ -316,11 +320,7 @@ export class Graph extends Entities.Entity {
     }
 
 
-    public hasSubGraph(H:Graph) {
-
-        //enumerate possible sub graphs.
-
-        // find all n-element subsets of a set.
+    public hasSubGraph(H:Graph): Array<Array<number>>{
 
         var c = 0;
         var X = this.getVertices().map(function (d) {
@@ -331,19 +331,23 @@ export class Graph extends Entities.Entity {
 
         var tmp:Graph;
 
+        var toReturn : Array<Array<number>> = [];
+
+        console.log(S);
+
         for (var s in S) {
 
             tmp = this.inducedGraph(S[s]);
 
             if (H.isoMorphic(tmp)) {
 
-                return S[s];
+                toReturn.push(S[s]);
 
             }
 
         }
 
-        return null;
+        return toReturn;
     }
 
 }

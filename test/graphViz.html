@@ -51,6 +51,7 @@
 
             }
 
+            /*
             var adj2 = {
 
                 0: [1],
@@ -60,11 +61,17 @@
                 4: [0]
 
             };
+            */
+
+            var adj2 = {
+
+                0: []
+
+            };
 
             var adj = {
 
-                0: [1],
-                1: []
+                0: []
 
             };
 
@@ -79,9 +86,7 @@
             var r1 = new Rule.Rule(G, function(host, ids){
 
                 $('#output').text(ids);
-
                 host.removeNode(ids[ids.length - 1]);
-
                 return host;
 
             });
@@ -95,7 +100,7 @@
 
                 for(var i = 0; i < ids.length; i++){
 
-                    host.addEdgeByNumber(x, i, {}, 0);
+                    host.addEdgeByNumber(x, ids[i], {}, 0);
 
                 }
 
@@ -103,10 +108,24 @@
 
             });
 
-            r2.tryRule(H);
-            r2.tryRule(H);
-            r2.tryRule(H);
-            r2.tryRule(H);
+            var addLeaf = new Rule.Rule(G, function(host, ids){
+
+                var x = host.addNode();
+                host.addEdgeByNumber(ids[0], x, {}, 1);
+                return host;
+
+            });
+
+            var i = 0;
+
+            var N = addLeaf.tryRule(H);
+
+            while(i < 100 && N){
+                N = addLeaf.tryRule(H);
+                console.log(N);
+                console.log(i);
+                i++;
+            }
 
             showGraph("viz-3", H);
 
