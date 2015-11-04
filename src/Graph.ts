@@ -91,6 +91,12 @@ export class Graph extends Entities.Entity {
        return this.edgeSet;
     }
 
+    public getSize():number{
+
+        return this.vertexSet.length;
+
+    }
+
     public asMatrix():Array<Array<number>> {
 
         var M = [];
@@ -179,8 +185,6 @@ export class Graph extends Entities.Entity {
      */
     public inducedGraph(vertices: Array<number>) : Graph{
 
-        vertices;
-
         var f : gf.GraphFactory = new gf.GraphFactory();
         var g = f.makeCopy(this);
 
@@ -197,13 +201,11 @@ export class Graph extends Entities.Entity {
 
         }
 
-        console.log(toRemove);
+        toRemove.sort().reverse();
 
-        toRemove.sort();
+        for(var r = 0; r < toRemove.length; r++){
 
-        for(var r = toRemove.length - 1; r >= 0; r--){
-
-            g.removeNode(r);
+            g.removeNode(toRemove[r]);
 
         }
 
@@ -213,8 +215,9 @@ export class Graph extends Entities.Entity {
 
     public isoMorphic(g:Graph):boolean {
 
-        //console.log(this.repAsMatrix());
-        //console.log(g.repAsMatrix());
+        console.log("----");
+        console.log(this.repAsMatrix());
+        console.log(g.repAsMatrix());
 
         if(
             g.getVertices().length !== this.getVertices().length ||
@@ -263,12 +266,78 @@ export class Graph extends Entities.Entity {
     }
 
 
+    private getSubsets(size : number, L : Array<number>): Array<Array<number>>{
 
-    public hasSubGraph(H : Graph):boolean{
+        var toReturn: Array<Array<number>> = [];
+        var X: Array<number> = [];
 
 
+        // base case: size = 1;
+        //
+        if(size === 1){
 
-        return false;
+            for(var i = 0; i < L.length; i++){
+                toReturn.push([L[i]]);
+            }
+
+        }else{
+
+            for(var i = 0; i < L.length; i++){
+
+                X = this.getSubsets(size-1, L.slice(i+1));
+
+                for(var j = 0; j < X.length; j++){
+
+                    toReturn.push([L[i]].concat(X[j]));
+
+                }
+
+            }
+
+        }
+
+        return toReturn;
+
+    }
+
+
+    public hasSubGraph(H : Graph){
+
+        //enumerate possible sub graphs.
+
+        // find all n-element subsets of a set.
+
+        var c = 0;
+        var X = this.getVertices().map(function(d){
+            return c++;
+        });
+
+        console.log(H);
+
+        var S = this.getSubsets(H.getSize(), X);
+
+        var tmp : Graph;
+
+        console.log(util.inspect(S));
+
+
+        for(var s in S){
+
+            tmp = this.inducedGraph(S[s]);
+
+            console.log(this.repAsMatrix());
+            console.log(S[s]);
+            console.log(tmp.repAsMatrix());
+
+            if(H.isoMorphic(tmp)){
+
+                return S[s];
+
+            }
+
+        }
+
+        return null;
     }
 
 }
