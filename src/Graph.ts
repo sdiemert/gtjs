@@ -34,6 +34,8 @@ export class Graph extends Entities.Entity {
      */
     public addNode(n:Entities.Node):number {
 
+        n = n || new Entities.Node({});
+
         this.vertexSet.push(n);
         return this.vertexSet.length - 1;
 
@@ -71,6 +73,18 @@ export class Graph extends Entities.Entity {
         return this.edgeSet.length - 1;
     }
 
+    public addEdgeByNumber(i:number, j:number, value:Object, direction:number):boolean {
+
+        value = value || {};
+        direction = direction || 0;
+
+        var e = new Entities.Edge(value, this.vertexSet[i], this.vertexSet[j], direction);
+
+        this.addEdge(e);
+
+        return true;
+    }
+
     public removeEdge(i:number):boolean {
 
         if (!this.edgeSet[i]) {
@@ -88,11 +102,11 @@ export class Graph extends Entities.Entity {
 
     }
 
-    public getEdges():Array<Entities.Edge>{
-       return this.edgeSet;
+    public getEdges():Array<Entities.Edge> {
+        return this.edgeSet;
     }
 
-    public getSize():number{
+    public getSize():number {
 
         return this.vertexSet.length;
 
@@ -158,17 +172,17 @@ export class Graph extends Entities.Entity {
         return s;
     }
 
-    public getDegree(i:number):number{
+    public getDegree(i:number):number {
 
         //degrees are defined as the number of outgoing edges.
 
         var count = 0;
 
-        var v : Entities.Node = this.getVertices()[i];
+        var v:Entities.Node = this.getVertices()[i];
 
-        for(var e = 0; e < this.getEdges().length; e++){
+        for (var e = 0; e < this.getEdges().length; e++) {
 
-            if(this.edgeSet[e].getDirection() !== -1 && this.edgeSet[e].getEnd1() === v){
+            if (this.edgeSet[e].getDirection() !== -1 && this.edgeSet[e].getEnd1() === v) {
                 count++;
             }
 
@@ -184,18 +198,18 @@ export class Graph extends Entities.Entity {
      * Returns the induced graph.
      * @param vertices
      */
-    public inducedGraph(vertices: Array<number>) : Graph{
+    public inducedGraph(vertices:Array<number>):Graph {
 
-        var f : gf.GraphFactory = new gf.GraphFactory();
+        var f:gf.GraphFactory = new gf.GraphFactory();
         var g = f.makeCopy(this);
 
         var toRemove = [];
 
         var num = g.getVertices().length;
 
-        for(var v = 0; v < num; v++){
+        for (var v = 0; v < num; v++) {
 
-            if(vertices.indexOf(v) === -1){
+            if (vertices.indexOf(v) === -1) {
 
                 toRemove.push(v);
             }
@@ -204,7 +218,7 @@ export class Graph extends Entities.Entity {
 
         toRemove.sort().reverse();
 
-        for(var r = 0; r < toRemove.length; r++){
+        for (var r = 0; r < toRemove.length; r++) {
 
             g.removeNode(toRemove[r]);
 
@@ -216,14 +230,14 @@ export class Graph extends Entities.Entity {
 
     public isoMorphic(g:Graph):boolean {
 
-        if(
+        if (
             g.getVertices().length !== this.getVertices().length ||
             g.getEdges().length !== this.getEdges().length
-        ){
+        ) {
             return false;
         }
 
-        if(g.getVertices().length === 1 && g.getEdges().length === 0){
+        if (g.getVertices().length === 1 && g.getEdges().length === 0) {
             return true;
         }
 
@@ -231,9 +245,9 @@ export class Graph extends Entities.Entity {
         var graphA = null;
         var graphB = null;
 
-        for(var i = 0; i < this.getVertices().length; i++){
+        for (var i = 0; i < this.getVertices().length; i++) {
 
-            for(var j = 0; j < g.getVertices().length; j++){
+            for (var j = 0; j < g.getVertices().length; j++) {
 
                 graphA = factory.makeCopy(g);
                 graphB = factory.makeCopy(this);
@@ -242,7 +256,7 @@ export class Graph extends Entities.Entity {
 
                 //TODO: other comparisons here....
 
-                if(graphA.getDegree(i) !== graphB.getDegree(j)){
+                if (graphA.getDegree(i) !== graphB.getDegree(j)) {
                     delete graphA;
                     delete graphB;
                     continue;
@@ -251,7 +265,7 @@ export class Graph extends Entities.Entity {
                 graphA.removeNode(i);
                 graphB.removeNode(j);
 
-                if(graphB.isoMorphic(graphA)){
+                if (graphB.isoMorphic(graphA)) {
                     delete graphA;
                     delete graphB;
                     return true;
@@ -263,27 +277,27 @@ export class Graph extends Entities.Entity {
     }
 
 
-    private getSubsets(size : number, L : Array<number>): Array<Array<number>>{
+    private getSubsets(size:number, L:Array<number>):Array<Array<number>> {
 
-        var toReturn: Array<Array<number>> = [];
-        var X: Array<number> = [];
+        var toReturn:Array<Array<number>> = [];
+        var X:Array<number> = [];
 
 
         // base case: size = 1;
         //
-        if(size === 1){
+        if (size === 1) {
 
-            for(var i = 0; i < L.length; i++){
+            for (var i = 0; i < L.length; i++) {
                 toReturn.push([L[i]]);
             }
 
-        }else{
+        } else {
 
-            for(var i = 0; i < L.length; i++){
+            for (var i = 0; i < L.length; i++) {
 
-                X = this.getSubsets(size-1, L.slice(i+1));
+                X = this.getSubsets(size - 1, L.slice(i + 1));
 
-                for(var j = 0; j < X.length; j++){
+                for (var j = 0; j < X.length; j++) {
 
                     toReturn.push([L[i]].concat(X[j]));
 
@@ -298,26 +312,26 @@ export class Graph extends Entities.Entity {
     }
 
 
-    public hasSubGraph(H : Graph){
+    public hasSubGraph(H:Graph) {
 
         //enumerate possible sub graphs.
 
         // find all n-element subsets of a set.
 
         var c = 0;
-        var X = this.getVertices().map(function(d){
+        var X = this.getVertices().map(function (d) {
             return c++;
         });
 
         var S = this.getSubsets(H.getSize(), X);
 
-        var tmp : Graph;
+        var tmp:Graph;
 
-        for(var s in S){
+        for (var s in S) {
 
             tmp = this.inducedGraph(S[s]);
 
-            if(H.isoMorphic(tmp)){
+            if (H.isoMorphic(tmp)) {
 
                 return S[s];
 

@@ -57,9 +57,12 @@ export class GraphFactory {
         var vertices = G.getVertices();
         var edges = G.getEdges();
 
+        console.log(G);
+
         var tmpEdge : en.Edge;
 
         for (var v = 0; v < vertices.length; v++) {
+            console.log(v);
             newGraph.addNode(this.copyNode(vertices[v]));
         }
 

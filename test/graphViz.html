@@ -32,8 +32,6 @@
 
     <script>
 
-
-
         requirejs(['../bin/GraphFactory', '../bin/VizJsAdaptor', 'vis.min.js', '../bin/Rule'], function(Factory, Adaptor, vis, Rule){
 
             function showGraph(id, toShow){
@@ -80,15 +78,42 @@
             showGraph("viz-1", H);
             showGraph("viz-2", G);
 
-            var r = new Rule.Rule(G, function(host, ids){
+            //Deletion rule
+            var r1 = new Rule.Rule(G, function(host, ids){
 
                 $('#output').text(ids);
 
                 host.removeNode(ids[ids.length - 1]);
 
+                return host;
+
             });
 
-            var R = r.tryRule(H);
+            //Addition Rule
+            var r2 = new Rule.Rule(G, function(host, ids){
+
+                $('#output').text(ids);
+
+                var x = host.addNode();
+
+                for(var i = 0; i < ids.length; i++){
+
+                    host.addEdgeByNumber(x, i, {}, 0);
+
+                }
+
+                console.log("Finished R2");
+                console.log(host.asMatrix());
+
+                return host;
+
+            });
+
+            r2.tryRule(H);
+            r2.tryRule(H);
+            r2.tryRule(H);
+            r2.tryRule(H);
+           // R = r1.tryRule(H);
 
             showGraph("viz-3", H);
 
