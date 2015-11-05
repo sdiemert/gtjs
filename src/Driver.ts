@@ -2,19 +2,6 @@
  * Created by sdiemert on 2015-10-31.
  */
 
-import util = require('util');
-
-/*
-var adj = {
-
-    0: [1,4],
-    1: [0,2],
-    2: [1,3],
-    3: [2,4],
-    4: [3,0],
-
-};
-*/
 var adj = {
 
     0: [1],

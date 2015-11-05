@@ -18,18 +18,18 @@ export class GraphFactory {
         var tmpNode:en.Node = null;
         var tmpEdge:en.Edge = null;
 
-        var newGraph:g.Graph = new g.Graph({name: name});
+        var newGraph:g.Graph = new g.Graph(null);
 
         //create nodes.
         for (var x in list) {
-            tmpNode = new en.Node({name: "N" + x});
+            tmpNode = new en.Node(null);
             newGraph.addNode(tmpNode);
         }
 
         //create edges
         for (var x in list) {
             for (var e in list[x]) {
-                tmpEdge = new en.Edge({}, newGraph.getVertices()[x], newGraph.getVertices()[list[x][e]], 1);
+                tmpEdge = new en.Edge(null, newGraph.getVertices()[x], newGraph.getVertices()[list[x][e]], 1);
                 newGraph.addEdge(tmpEdge);
             }
         }
@@ -40,7 +40,7 @@ export class GraphFactory {
 
     public newGraphFromMatrix(M:Array<Array<number>>, name:String):g.Graph {
 
-        var newGraph:g.Graph = new g.Graph({name: name});
+        var newGraph:g.Graph = new g.Graph(null);
 
         var tmpNode:en.Node = null;
         var tmpEdge:en.Node = null;

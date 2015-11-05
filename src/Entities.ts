@@ -2,30 +2,34 @@
  * Created by sdiemert on 2015-10-31.
  */
 
-export class Entity{
+export interface Value {
+    type: string;
+}
 
-    private value : Object = null;
+export class Entity {
 
-    public constructor(value:Object){
+    private value:Value = null;
 
-        this.value = value || {type : null};
+    public constructor(value:Value) {
+
+        this.value = value || {type: null};
     }
 
-    public getValue(): Object{
+    public getValue():Value {
         return this.value;
     }
 
 }
 
-export class Node extends Entity{
+export class Node extends Entity {
 
-    public constructor(value:Object){
-       super(value);
+    public constructor(value:Value) {
+        super(value);
     }
 
 }
 
-export class Edge extends Entity{
+export class Edge extends Entity {
 
     private end1:Node = null;
     private end2:Node = null;
@@ -35,7 +39,7 @@ export class Edge extends Entity{
     // 0 : end1 <-> end2
     private direction:number = null;
 
-    public constructor(value:Object, end1:Node, end2:Node, direction: number){
+    public constructor(value:Value, end1:Node, end2:Node, direction:number) {
 
         super(value);
 
@@ -55,7 +59,7 @@ export class Edge extends Entity{
         return this.end2;
     }
 
-    public getDirection():number{
+    public getDirection():number {
         return this.direction;
     }
 }

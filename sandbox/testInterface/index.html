@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Adaptive Interface Test</title>
+
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+    <script src="../js/require.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet"/>
+
+
+    <style type="text/css">
+        .viz-container {
+            width: 600px;
+            height: 400px;
+            border: 1px solid lightgray;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-xs-12">
+
+            <h2>Adaptive Interface Test</h2>
+
+                <div class="row">
+
+                    <div id='root' class="col-xs-6">
+
+                    </div>
+                    <div class="col-xs-4">
+
+                        <div id="graph-show" class="viz-container">
+
+                        </div>
+
+                    </div>
+                    <div class="col-xs-2">
+
+                        <button id="add-input-button" class="btn btn-primary">Add Input</button>
+                        <br>
+                        <br>
+                        <button id="add-box-button" class="btn btn-primary">Add Box</button>
+
+                    </div>
+
+                </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script src="testInterface.js"></script>
+
+</body>
+</html>

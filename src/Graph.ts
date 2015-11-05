@@ -3,22 +3,14 @@
  */
 
 import Entities = require("./Entities");
-import util = require('util');
 import gf = require('./GraphFactory');
-
-function choose(n, k) {
-    if (k === 0) {
-        return 1;
-    }
-    return (n * choose(n - 1, k - 1)) / k
-}
 
 export class Graph extends Entities.Entity {
 
     private vertexSet:Array<Entities.Node> = [];
     private edgeSet:Array<Entities.Edge> = [];
 
-    public constructor(value:Object) {
+    public constructor(value:Entities.Value) {
 
         super(value);
 
@@ -34,7 +26,9 @@ export class Graph extends Entities.Entity {
      */
     public addNode(n:Entities.Node):number {
 
-        n = n || new Entities.Node({});
+        var o : Entities.Value = {type : null};
+
+        n = n || new Entities.Node(o);
 
         this.vertexSet.push(n);
         return this.vertexSet.length - 1;
@@ -73,9 +67,9 @@ export class Graph extends Entities.Entity {
         return this.edgeSet.length - 1;
     }
 
-    public addEdgeByNumber(i:number, j:number, value:Object, direction:number):boolean {
+    public addEdgeByNumber(i:number, j:number, value:Entities.Value, direction:number):boolean {
 
-        value = value || {};
+        value = value || {type : null};
         direction = direction || 0;
 
         var e = new Entities.Edge(value, this.vertexSet[i], this.vertexSet[j], direction);
@@ -83,6 +77,27 @@ export class Graph extends Entities.Entity {
         this.addEdge(e);
 
         return true;
+    }
+
+    public getAdjacentNodes(n : Entities.Node):Array<Entities.Node>{
+
+        var toReturn : Array<Entities.Node> = [];
+
+        for(var e in this.edgeSet){
+
+            if (this.edgeSet[e].getDirection() !== -1) {
+
+                if(this.edgeSet[e].getEnd1() === n){
+
+                    toReturn.push(this.edgeSet[e].getEnd2());
+
+                }
+
+            }
+        }
+
+        return toReturn;
+
     }
 
     public removeEdge(i:number):boolean {
@@ -234,7 +249,6 @@ export class Graph extends Entities.Entity {
 
     private compareNodeValues(n1 : Entities.Node, n2: Entities.Node):boolean{
 
-
         if(n1.getValue().type === n2.getValue().type){
 
             return true;
@@ -258,7 +272,11 @@ export class Graph extends Entities.Entity {
             return false;
         }
 
-        if (g.getVertices().length === 1 && g.getEdges().length === 0) {
+        if (
+            g.getVertices().length === 1 &&
+            g.getEdges().length === 0 &&
+            this.compareNodeValues(g.getVertices()[0], this.vertexSet[0])
+        ) {
             return true;
         }
 
@@ -278,23 +296,16 @@ export class Graph extends Entities.Entity {
                 //TODO: other comparisons here....
 
                 if (graphA.getDegree(i) !== graphB.getDegree(j)) {
-
-                    delete graphA;
-                    delete graphB;
                     continue;
 
-                }else if(this.compareNodeValues(graphA.getVertices()[i], graphB.getVertices()[j])){
-
-
-
+                }else if(!this.compareNodeValues(graphA.getVertices()[i], graphB.getVertices()[j])){
+                    continue;
                 }
 
                 graphA.removeNode(i);
                 graphB.removeNode(j);
 
                 if (graphB.isoMorphic(graphA)) {
-                    delete graphA;
-                    delete graphB;
                     return true;
                 }
             }
@@ -351,8 +362,6 @@ export class Graph extends Entities.Entity {
         var tmp:Graph;
 
         var toReturn : Array<Array<number>> = [];
-
-        console.log(S);
 
         for (var s in S) {
 
