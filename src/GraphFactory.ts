@@ -6,9 +6,39 @@
 import g = require("./Graph");
 import en = require("./Entities");
 
+export interface GraphObject{
+
+    name : string;
+    nodes : [ en.Value ];
+    edges : [ { end1 : number, end2: number, direction : number, value : en.Value } ];
+
+}
+
 export class GraphFactory {
 
-    public constructor() {
+    public constructor() {}
+
+    /**
+     * {name : XXXX, nodes: [{type: XXX, ... }], edges: [{end1 : Y, end2: Z, direction: W, value : {type : XXX}, ... }]
+     *  - Where the id of the nodes used in edges are indices in the of nodes.
+     */
+    public graphFromObject(obj : GraphObject):g.Graph{
+
+        var G = new g.Graph(null);
+
+        for(var n = 0; n < obj.nodes.length; n++ ){
+
+            G.addNode(new en.Node(obj.nodes[n]));
+
+        }
+
+        for(var e = 0; e < obj.edges.length; e++){
+
+            G.addEdgeByNumber(obj.edges[e].end1, obj.edges[e].end2, obj.edges[e].value, obj.edges[e].direction);
+
+        }
+
+        return G;
     }
 
     public newGraphFromAdjList(list:Object, name:string):g.Graph {
