@@ -56,6 +56,17 @@ requirejs(['../../bin/Graph', '../../bin/Rule', '../../bin/Entities',
 
     }
 
+    function addInput2(){
+
+        sys.AddInput2.tryRule(UIModel);
+
+        $("#root").text("");
+        renderModel('#root', 0, UIModel);
+
+        showGraph('graph-show', UIModel);
+
+    }
+
 
     function addInput(){
 
@@ -77,6 +88,7 @@ requirejs(['../../bin/Graph', '../../bin/Rule', '../../bin/Entities',
 
     }
     $('#add-input-button').click(addInput);
+    $('#add-input-button2').click(addInput2);
     $('#add-box-button').click(addBox);
 
 });
