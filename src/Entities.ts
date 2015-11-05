@@ -8,7 +8,7 @@ export class Entity{
 
     public constructor(value:Object){
 
-        this.value = value;
+        this.value = value || {type : null};
     }
 
     public getValue(): Object{

@@ -28,8 +28,6 @@
     <div id="viz-2" class="viz-container"></div> <br>
     <div id="viz-3" class="viz-container"></div> <br>
 
-
-
     <script>
 
         requirejs(['../bin/GraphFactory', '../bin/VizJsAdaptor', 'vis.min.js', '../bin/Rule'], function(Factory, Adaptor, vis, Rule){
@@ -120,14 +118,21 @@
 
             var N = addLeaf.tryRule(H);
 
-            while(i < 100 && N){
+            function foo(){
+
                 N = addLeaf.tryRule(H);
-                console.log(N);
-                console.log(i);
                 i++;
+                showGraph("viz-3", H);
+
+                if(i < 10){
+                    setTimeout(foo, 500);
+                }
+
+
             }
 
-            showGraph("viz-3", H);
+            foo();
+
 
 
         });

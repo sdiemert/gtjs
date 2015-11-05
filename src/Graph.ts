@@ -232,6 +232,19 @@ export class Graph extends Entities.Entity {
 
     }
 
+    private compareNodeValues(n1 : Entities.Node, n2: Entities.Node):boolean{
+
+
+        if(n1.getValue().type === n2.getValue().type){
+
+            return true;
+
+        }
+
+
+        return false;
+    }
+
     public isoMorphic(g:Graph):boolean {
 
         if (
@@ -265,9 +278,15 @@ export class Graph extends Entities.Entity {
                 //TODO: other comparisons here....
 
                 if (graphA.getDegree(i) !== graphB.getDegree(j)) {
+
                     delete graphA;
                     delete graphB;
                     continue;
+
+                }else if(this.compareNodeValues(graphA.getVertices()[i], graphB.getVertices()[j])){
+
+
+
                 }
 
                 graphA.removeNode(i);
