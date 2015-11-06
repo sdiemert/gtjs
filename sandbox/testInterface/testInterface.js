@@ -1,11 +1,9 @@
 requirejs(['../../bin/Graph', '../../bin/Rule', '../../bin/Entities',
-    'modelSystem', '../js/vis.min.js', '../../bin/VizJsAdaptor', 'interfaceModels'], function(Graph, Rule, En, sys, vis, Adaptor, iFace){
+    'modelSystem', '../js/vis.min.js', '../../bin/VizJsAdaptor', 'interfaceModels',
+    '../../bin/GraphFactory'], function(Graph, Rule, En, sys, vis, Adaptor, iFace, GF){
 
-    var UIModel = new Graph.Graph();
-
-    UIModel.addNode(new En.Node({type : 'root'}));
-
-    console.log(UIModel);
+    var gf = new GF.GraphFactory();
+    var UIModel = gf.graphFromObject(JSON.parse('{"name":"M","nodes":[{"type":"root","new":false},{"type":"box","new":true}],"edges":[{"end1":0,"end2":1,"direction":1,"value":{"type":null,"new":false}}]}'));
 
     function showGraph(id, toShow){
 
@@ -87,6 +85,9 @@ requirejs(['../../bin/Graph', '../../bin/Rule', '../../bin/Entities',
         showGraph('graph-show', UIModel);
 
     }
+
+    showGraph('graph-show', UIModel);
+
     $('#add-input-button').click(addInput);
     $('#add-input-button2').click(addInput2);
     $('#add-box-button').click(addBox);
