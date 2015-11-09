@@ -107,8 +107,8 @@ export class Graph extends Entities.Entity {
         }
 
         delete this.edgeSet[i];
+        this.edgeSet = this.edgeSet.filter(function(n){ return n != undefined });
         return true;
-
     }
 
     public getVertices():Array<Entities.Node> {
@@ -261,6 +261,8 @@ export class Graph extends Entities.Entity {
 
     public isoMorphic(g:Graph):boolean {
 
+        console.log(g);
+        console.log(this);
         if (
             g.getVertices().length !== this.getVertices().length
 

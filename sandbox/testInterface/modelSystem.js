@@ -60,13 +60,13 @@ define(['require', 'exports',
         });
 
         $.get('rules/addBox1.json', function (data) {
-
             var rf = new ruleFactory.RuleFactory();
-
-            console.log(data);
-
             exports.AddBox1 = rf.ruleFromJson(data);
+        });
 
+        $.get('rules/addEdge.json', function (data) {
+            var rf = new ruleFactory.RuleFactory();
+            exports.AddBoxEdge = rf.ruleFromJson(data);
         });
 
     }

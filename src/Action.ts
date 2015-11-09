@@ -4,8 +4,9 @@
 
 import g = require('./Graph');
 import en= require('./Entities');
-import {GraphFactory} from './GraphFactory';
+import {GraphFactory, EdgeStruct} from './GraphFactory';
 import {Value} from "./Entities";
+import {Edge} from "./Entities";
 
 export interface Action {
 
@@ -98,12 +99,42 @@ export class AddAction extends GraphAction {
 
 }
 
+export class AddEdgesToExistingGraph extends GraphAction{
+
+    private edges : Array<EdgeStruct>;
+
+    constructor(name:string, edges : Array<EdgeStruct>) {
+        super(name);
+        this.edges = edges;
+    }
+
+    public doAction(host:g.Graph, match:Array<number>):g.Graph {
+
+        console.log(match);
+
+        for(var e = 0; e < this.edges.length; e++){
+
+            host.addEdgeByNumber(
+                match[this.edges[e].end1],
+                match[this.edges[e].end2],
+                this.edges[e].value,
+                this.edges[e].direction
+            );
+
+        }
+
+        return host;
+    }
+
+
+}
+
 export class AddSubGraph extends GraphAction {
 
     private newGraph:g.Graph;
-    private edges:Array<{end1:number, end2:number, direction:number, value:Value}>;
+    private edges:Array<EdgeStruct>;
 
-    constructor(name:string, newGraph:g.Graph, edges:Array<{end1:number, end2:number, direction:number, value:Value}>) {
+    constructor(name:string, newGraph:g.Graph, edges:Array<EdgeStruct>) {
         super(name);
         this.newGraph = newGraph;
         this.edges = edges;
@@ -128,8 +159,6 @@ export class AddSubGraph extends GraphAction {
 
         // Indices are the node # in the original graph, values are indices are the node number in the host.
 
-        console.log(match);
-
         var newGraphNodeMap:Array<number> = [];
 
         for (var v = 0; v < this.newGraph.getVertices().length; v++) {
@@ -146,8 +175,6 @@ export class AddSubGraph extends GraphAction {
             e1 = this.newGraph.nodeIdFromObject(this.newGraph.getEdges()[e].getEnd1());
             e2 = this.newGraph.nodeIdFromObject(this.newGraph.getEdges()[e].getEnd2());
 
-            console.log("e1: "+ newGraphNodeMap[e1] + " e2: "+ newGraphNodeMap[e2]);
-
             host.addEdgeByNumber(
                 newGraphNodeMap[e1],
                 newGraphNodeMap[e2],
@@ -159,12 +186,7 @@ export class AddSubGraph extends GraphAction {
 
         // 2) Add edges between the matched values in the host graph and the new nodes.
 
-
-        console.log(newGraphNodeMap);
-
         for(var e = 0; e < this.edges.length; e++){
-
-            console.log(this.edges[e].end1 + ", "+ this.edges[e].end2);
 
             host.addEdgeByNumber(
                 match[this.edges[e].end1],

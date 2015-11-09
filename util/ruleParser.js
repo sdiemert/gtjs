@@ -6,9 +6,24 @@ var xml2js = require('xml2js');
 var fs     = require('fs');
 var util   = require('util');
 
-var f = fs.readFileSync("/Users/sdiemert/workspace/gtjs/sandbox/groove/testGrammar.gps/addBox1.gpr", 'utf-8');
+//var f = fs.readFileSync("/Users/sdiemert/workspace/gtjs/sandbox/groove/testGrammar.gps/addBox1.gpr", 'utf-8');
+var f = fs.readFileSync("/Users/sdiemert/workspace/gtjs/sandbox/groove/testGrammar.gps/addEdge.gpr", 'utf-8');
 
 var ruleGraph = {name: 'M', nodes: [], edges: []};
+
+function lookUpValueIndex(rule, val){
+
+    for(var v = 0; v < rule.nodes.length; v++){
+
+        if(rule.nodes[v].name === val){
+
+            return v;
+
+        }
+
+    }
+
+}
 
 
 xml2js.parseString(f, function (err, result) {
@@ -41,6 +56,8 @@ xml2js.parseString(f, function (err, result) {
                 } else if (val[0] === 'new') {
                     tmpNode.newEntity = true;
                 }
+
+                tmpNode.name = parseInt(nId.slice(1));
 
             }
 
@@ -76,8 +93,8 @@ xml2js.parseString(f, function (err, result) {
             }
 
             ruleGraph.edges.push({
-                end1 : parseInt(from),
-                end2 : parseInt(to),
+                end1 : lookUpValueIndex(ruleGraph, parseInt(from)),
+                end2 : lookUpValueIndex(ruleGraph, parseInt(to)),
                 direction: 1,
                 value : tmpVal
             });
@@ -89,7 +106,8 @@ xml2js.parseString(f, function (err, result) {
     console.log(util.inspect(ruleGraph,false,null));
     console.log(JSON.stringify(ruleGraph));
 
-    fs.writeFileSync('sandbox/testInterface/rules/addBox1.json', JSON.stringify(ruleGraph), 'utf-8');
+    //fs.writeFileSync('sandbox/testInterface/rules/addBox1.json', JSON.stringify(ruleGraph), 'utf-8');
+    fs.writeFileSync('sandbox/testInterface/rules/addEdge.json', JSON.stringify(ruleGraph), 'utf-8');
 
 });
 

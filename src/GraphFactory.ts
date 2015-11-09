@@ -14,6 +14,8 @@ export interface GraphObject{
 
 }
 
+export interface EdgeStruct {end1:number, end2:number, direction:number, value:en.Value};
+
 export class GraphFactory {
 
     public constructor() {}

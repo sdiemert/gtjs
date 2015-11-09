@@ -92,6 +92,13 @@ requirejs(['../../bin/Graph', '../../bin/Rule', '../../bin/Entities',
 
     }
 
+    function addBoxEdge(){
+        sys.AddBoxEdge.tryRule(UIModel);
+        $("#root").text("");
+        //renderModel('#root', 0, UIModel);
+        showGraph('graph-show', UIModel);
+    }
+
     showGraph('graph-show', UIModel);
     renderModel('#root', 0, UIModel);
 
@@ -99,5 +106,6 @@ requirejs(['../../bin/Graph', '../../bin/Rule', '../../bin/Entities',
     $('#add-input-button2').click(addInput2);
     $('#add-box-button').click(addBox);
     $('#add-box-1-button').click(addBox1);
+    $('#add-box-edge-button').click(addBoxEdge);
 
 });

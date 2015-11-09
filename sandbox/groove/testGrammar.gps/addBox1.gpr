@@ -9,19 +9,9 @@
                 <string>334 188 27 32</string>
             </attr>
         </node>
-        <node id="n1">
-            <attr name="layout">
-                <string>290 378 25 32</string>
-            </attr>
-        </node>
-        <node id="n2">
-            <attr name="layout">
-                <string>483 337 25 32</string>
-            </attr>
-        </node>
         <node id="n3">
             <attr name="layout">
-                <string>382 529 25 32</string>
+                <string>427 340 25 32</string>
             </attr>
         </node>
         <edge from="n0" to="n0">
@@ -29,39 +19,9 @@
                 <string>type:root</string>
             </attr>
         </edge>
-        <edge from="n0" to="n1">
+        <edge from="n0" to="n3">
             <attr name="label">
                 <string>in</string>
-            </attr>
-        </edge>
-        <edge from="n0" to="n2">
-            <attr name="label">
-                <string>in</string>
-            </attr>
-        </edge>
-        <edge from="n1" to="n1">
-            <attr name="label">
-                <string>type:box</string>
-            </attr>
-        </edge>
-        <edge from="n1" to="n2">
-            <attr name="label">
-                <string>x</string>
-            </attr>
-        </edge>
-        <edge from="n1" to="n3">
-            <attr name="label">
-                <string>x</string>
-            </attr>
-        </edge>
-        <edge from="n2" to="n2">
-            <attr name="label">
-                <string>type:box</string>
-            </attr>
-        </edge>
-        <edge from="n2" to="n3">
-            <attr name="label">
-                <string>x</string>
             </attr>
         </edge>
         <edge from="n3" to="n3">
