@@ -69,6 +69,24 @@ export class RuleFactory {
         //  - add actions
         //  - delete actions
 
+        // TODO: Call edit actions here....
+
+        RuleFactory.extractAddActions(obj, actions);
+
+        RuleFactory.extractDeleteActions(obj, actions);
+
+        return actions;
+
+    }
+
+    private static extractDeleteActions(obj : graphFactory.GraphObject, actions : Array<Action>){
+
+
+
+    }
+
+    private static extractAddActions(obj : graphFactory.GraphObject, actions: Array<Action>) {
+
         var toAdd:Array<number> = [];
         var newEdges = [];
 
@@ -86,13 +104,7 @@ export class RuleFactory {
 
         var newGraph:graph.Graph = H.inducedGraph(toAdd);
 
-        console.log(newGraph);
-        console.log(newEdges);
-
         actions.push(new AddSubGraph('add sub graph', newGraph, newEdges));
-
-        return actions;
-
     }
 
 
