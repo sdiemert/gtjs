@@ -3,6 +3,7 @@
  */
 
 import g = require("./Graph");
+import ga = require("./Action");
 
 function defaultCallback(host:g.Graph, matchList:Array<number>):g.Graph {
 
@@ -69,5 +70,31 @@ export class Rule {
         return this.callback(host, vertices);
 
     }
+
+}
+
+export class ActionRule extends Rule{
+
+    private actions : Array<ga.Action>;
+
+    constructor(actions : Array<ga.Action>, match : g.Graph){
+        super(match, this.applyActions);
+        this.actions = actions;
+    }
+
+    private applyActions(host : g.Graph, match : Array<number>) : g.Graph{
+
+        //apply each action in turn.
+
+        for(var a = 0; a < this.actions.length; a++){
+
+            host = this.actions[a].doAction(host, match);
+
+        }
+
+        return host;
+    }
+
+
 
 }

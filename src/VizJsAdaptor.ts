@@ -18,7 +18,7 @@ export class VizJsAdaptor{
 
         for(var v = 0; v < V.length; v++){
 
-            toReturn.nodes.push({id : v, label: v});
+            toReturn.nodes.push({id : v, label: v + " : "+V[v].getValue().type});
 
         }
 

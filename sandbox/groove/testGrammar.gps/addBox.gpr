@@ -6,12 +6,22 @@
         </attr>
         <node id="n0">
             <attr name="layout">
-                <string>343 190 27 32</string>
+                <string>376 227 27 32</string>
             </attr>
         </node>
         <node id="n1">
             <attr name="layout">
                 <string>290 378 25 32</string>
+            </attr>
+        </node>
+        <node id="n2">
+            <attr name="layout">
+                <string>483 337 25 32</string>
+            </attr>
+        </node>
+        <node id="n3">
+            <attr name="layout">
+                <string>666 327 25 32</string>
             </attr>
         </node>
         <edge from="n0" to="n0">
@@ -24,12 +34,47 @@
                 <string>in</string>
             </attr>
         </edge>
+        <edge from="n0" to="n2">
+            <attr name="label">
+                <string>in</string>
+            </attr>
+        </edge>
         <edge from="n1" to="n1">
             <attr name="label">
                 <string>new:</string>
             </attr>
         </edge>
         <edge from="n1" to="n1">
+            <attr name="label">
+                <string>type:box</string>
+            </attr>
+        </edge>
+        <edge from="n1" to="n2">
+            <attr name="label">
+                <string>x</string>
+            </attr>
+        </edge>
+        <edge from="n2" to="n2">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <edge from="n2" to="n2">
+            <attr name="label">
+                <string>type:box</string>
+            </attr>
+        </edge>
+        <edge from="n2" to="n3">
+            <attr name="label">
+                <string>x</string>
+            </attr>
+        </edge>
+        <edge from="n3" to="n3">
+            <attr name="label">
+                <string>new:</string>
+            </attr>
+        </edge>
+        <edge from="n3" to="n3">
             <attr name="label">
                 <string>type:box</string>
             </attr>

@@ -6,7 +6,7 @@ var xml2js = require('xml2js');
 var fs     = require('fs');
 var util   = require('util');
 
-var f = fs.readFileSync("/Users/sdiemert/workspace/gtjs/sandbox/groove/testGrammar.gps/addBox.gpr", 'utf-8');
+var f = fs.readFileSync("/Users/sdiemert/workspace/gtjs/sandbox/groove/testGrammar.gps/addBox1.gpr", 'utf-8');
 
 var ruleGraph = {name: 'M', nodes: [], edges: []};
 
@@ -17,7 +17,7 @@ xml2js.parseString(f, function (err, result) {
 
     // loop through all nodes and find properties (type) for each one.
 
-    var tmpNode = {type: null, new: false};
+    var tmpNode = {type: null, newEntity: false};
 
     var nodes = result.gxl.graph[0].node;
     var edges = result.gxl.graph[0].edge;
@@ -26,7 +26,7 @@ xml2js.parseString(f, function (err, result) {
 
     for (var n = 0; n < nodes.length; n++) {
 
-        tmpNode = {type: null, new: false};
+        tmpNode = {type: null, newEntity: false};
 
         nId = nodes[n]['$']['id'];
 
@@ -39,7 +39,7 @@ xml2js.parseString(f, function (err, result) {
                 if (val[0] === 'type') {
                     tmpNode.type = val[1];
                 } else if (val[0] === 'new') {
-                    tmpNode.new = true;
+                    tmpNode.newEntity = true;
                 }
 
             }
@@ -54,7 +54,7 @@ xml2js.parseString(f, function (err, result) {
 
     for (var e = 0; e < edges.length; e++) {
 
-        tmpVal = {type : null, new : false};
+        tmpVal = {type : null, newEntity : false};
 
         to   = edges[e]['$'].to;
         from = edges[e]['$'].from;
@@ -72,7 +72,7 @@ xml2js.parseString(f, function (err, result) {
             if (val[0] === 'type') {
                 tmpVal.type = val[1];
             } else if (val[0] === 'new') {
-                tmpVal.new = true;
+                tmpVal.newEntity = true;
             }
 
             ruleGraph.edges.push({
@@ -88,6 +88,8 @@ xml2js.parseString(f, function (err, result) {
 
     console.log(util.inspect(ruleGraph,false,null));
     console.log(JSON.stringify(ruleGraph));
+
+    fs.writeFileSync('sandbox/testInterface/rules/addBox1.json', JSON.stringify(ruleGraph), 'utf-8');
 
 });
 

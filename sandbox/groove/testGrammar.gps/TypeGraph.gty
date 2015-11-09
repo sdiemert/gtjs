@@ -29,5 +29,13 @@
                 <string>type:box</string>
             </attr>
         </edge>
+        <edge from="n1" to="n1">
+            <attr name="label">
+                <string>x</string>
+            </attr>
+            <attr name="layout">
+                <string>500 0 627 463 576 551 576 551 11</string>
+            </attr>
+        </edge>
     </graph>
 </gxl>

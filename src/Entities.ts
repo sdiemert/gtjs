@@ -4,6 +4,7 @@
 
 export interface Value {
     type: string;
+    newEntity : boolean;
 }
 
 export class Entity {
@@ -12,7 +13,7 @@ export class Entity {
 
     public constructor(value:Value) {
 
-        this.value = value || {type: null};
+        this.value = value || {type: null, newEntity : false};
     }
 
     public getValue():Value {

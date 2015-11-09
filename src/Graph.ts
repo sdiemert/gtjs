@@ -26,7 +26,7 @@ export class Graph extends Entities.Entity {
      */
     public addNode(n:Entities.Node):number {
 
-        var o : Entities.Value = {type : null};
+        var o : Entities.Value = {type : null, newEntity : false};
 
         n = n || new Entities.Node(o);
 
@@ -69,7 +69,7 @@ export class Graph extends Entities.Entity {
 
     public addEdgeByNumber(i:number, j:number, value:Entities.Value, direction:number):boolean {
 
-        value = value || {type : null};
+        value = value || {type : null, newEntity : false};
         direction = direction || 0;
 
         var e = new Entities.Edge(value, this.vertexSet[i], this.vertexSet[j], direction);
@@ -378,4 +378,8 @@ export class Graph extends Entities.Entity {
         return toReturn;
     }
 
+
+    public nodeIdFromObject(n:Entities.Node): number{
+        return this.vertexSet.indexOf(n);
+    }
 }

@@ -109,7 +109,7 @@ export class GraphFactory {
 
     }
 
-    private copyNode(n:en.Node):en.Node {
+    public copyNode(n:en.Node):en.Node {
         var newNode:en.Node = new en.Node(n.getValue());
         return newNode;
     }

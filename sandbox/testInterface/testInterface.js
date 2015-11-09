@@ -38,13 +38,10 @@ requirejs(['../../bin/Graph', '../../bin/Rule', '../../bin/Entities',
 
                 $(rootId).append(iFace.getBox(adj[v], x));
 
-                console.log("x: "+ x);
-
                 renderModel('#box-'+x, x, model);
 
             }else if(adj[v].getValue().type === 'input'){
 
-                console.log(rootId);
                 $(rootId).append(iFace.getInput(adj[v], x));
 
             }
@@ -86,10 +83,21 @@ requirejs(['../../bin/Graph', '../../bin/Rule', '../../bin/Entities',
 
     }
 
+    function addBox1(){
+
+        sys.AddBox1.tryRule(UIModel);
+        $("#root").text("");
+        renderModel('#root', 0, UIModel);
+        showGraph('graph-show', UIModel);
+
+    }
+
     showGraph('graph-show', UIModel);
+    renderModel('#root', 0, UIModel);
 
     $('#add-input-button').click(addInput);
     $('#add-input-button2').click(addInput2);
     $('#add-box-button').click(addBox);
+    $('#add-box-1-button').click(addBox1);
 
 });
