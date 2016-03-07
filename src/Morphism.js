@@ -137,6 +137,26 @@ class Morphism {
         }
     }
 
+    toString(){
+
+        var s = "{ ";
+
+        for(var k in this._mapping){
+
+            for(var i = 0; i < this._mapping[k].length; i++){
+
+                s += "("+k+","+this._mapping[k][i]+"), ";
+
+            }
+
+        }
+
+        s += "}";
+
+        return s;
+
+    }
+
 }
 
 module.exports = {Morphism: Morphism};

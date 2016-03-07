@@ -56,26 +56,6 @@ class Function extends Morphism {
         if(r) return r[0];
     }
 
-    toString(){
-
-        var s = "{ ";
-
-        for(var k in this._mapping){
-
-            for(var i = 0; i < this._mapping[k].length; i++){
-
-                s += "("+k+","+this._mapping[k][i]+"), ";
-
-            }
-
-        }
-
-        s += "}";
-
-        return s;
-
-    }
-
 }
 
 module.exports = {Function: Function};
