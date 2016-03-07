@@ -147,6 +147,7 @@ class Graph {
      * @return {string} A string representation of the graph.
      */
     toString() {
+
         var s = "";
 
         s += "Graph\t: " + this.id + "\n";
@@ -159,6 +160,7 @@ class Graph {
         s += "Le : E -> A\t: " + this.Le.toString() + "\n";
 
         return s;
+
     }
 
 }

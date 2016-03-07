@@ -52,8 +52,8 @@ class Function extends Morphism {
      */
     get(x){
         var r = super.get(x);
-
         if(r) return r[0];
+        else null;
     }
 
 }
