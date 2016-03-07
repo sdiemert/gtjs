@@ -384,4 +384,56 @@ describe("Graph", function () {
 
     });
 
+    describe("#removeVertex", function(){
+
+        var v1, v2, v3, e1, e2, e3;
+
+        beforeEach(function (done) {
+
+            //add vertices to work with...
+
+            v1 = G.addVertex("v1");
+            v2 = G.addVertex();
+            v3 = G.addVertex();
+
+            // add edges...
+
+            e1 = G.addEdge(v1, v2, "foo");
+            e2 = G.addEdge(v2, v3, "bar");
+            e3 = G.addEdge(v1, v3, "bin");
+
+            done();
+
+        });
+
+        it("should remove the vertex and all associated edges", function(){
+
+            var r = false;
+
+            assert.doesNotThrow(function(){
+                r = G.removeVertex(v1);
+            }, GraphInvalidError);
+
+            assert.equal(r, true);
+            assert.deepEqual(G.getVertices(), [v2, v3]);
+            assert.deepEqual(G.getEdges(), [e2]);
+
+        });
+
+        it("should fail to remove a vertex if it does not exist", function(){
+
+            var r = false;
+
+            assert.doesNotThrow(function(){
+                r = G.removeVertex(10);
+            }, GraphInvalidError);
+
+            assert.equal(r, false);
+            assert.deepEqual(G.getVertices(), [v1, v2, v3]);
+            assert.deepEqual(G.getEdges(), [e1, e2, e3]);
+
+        });
+
+    });
+
 });

@@ -108,7 +108,7 @@ class Morphism {
      * Removes the mapping between elements x and y. If only x is given removes
      * x from the domain.
      * @param x {Object} element from the domain to remove.
-     * @param y {Object} element from the codomain to remove.
+     * @param y {Object | undefined} element from the codomain to remove.
      * @return {boolean} returns true if successfully removed, false otherwise.
      */
     remove(x, y) {

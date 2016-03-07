@@ -238,27 +238,50 @@ class Graph {
      */
     removeVertex(x){
 
-        if(!this.V[x]) return false;
+        // TODO: this function may leave the graph in a partially
+        //  valid state.... We would like that if this fails it will
+        //  revert to the previous state.
 
-        // remove the vertex.
-        this.V.splice(this.V.indexOf(x), 1);
+        if(!this.V[x]) return false;
 
         // remove relations in S
         //      must remove all edges that use x as a source.
 
         var edgesToRemove = this.findEdgesBySourceVertex(x);
 
-        for(var e = 0; e < edgesToRemove.length; e++){
+        var r = true;
 
+        for (var e = 0; e < edgesToRemove.length; e++) {
 
+            r = this.removeEdge(edgesToRemove[e]);
+
+            // if removing edge fails
+            if (!r) return false;
 
         }
 
         // remove relations in T
+        //      must remove all edges that use x as a target.
+
+        edgesToRemove = this.findEdgesByTargetVertex(x);
+
+        for (var e = 0; e < edgesToRemove.length; e++) {
+
+            r = this.removeEdge(edgesToRemove[e]);
+
+            // if removing edge fails
+            if (!r) return false;
+
+        }
 
         // remove relations in Lv
+        r = this.Lv.remove(x);
 
-        // remove relations in Le
+        // remove the vertex.
+        this.V.splice(this.V.indexOf(x), 1);
+
+        // check that the graph is consistent
+        this.consistencyCheck();
 
         return true;
     }
