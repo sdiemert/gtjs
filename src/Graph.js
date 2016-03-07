@@ -16,10 +16,10 @@ class Graph {
         this.E = [];
         this.V = [];
 
-        this.S  = new Function();
-        this.T  = new Function();
-        this.Le = new Function();
-        this.Lv = new Function();
+        this.S  = new Function(); // S : E -> V
+        this.T  = new Function(); // T : E -> V
+        this.Le = new Function(); // Le : E -> Alphabet
+        this.Lv = new Function(); // Lv : V -> Alphabet
 
         this.vid_counter = 1;
         this.eid_counter = 1;
@@ -133,14 +133,26 @@ class Graph {
     /**
      * Determines if there is an edge: u -> v.
      *
-     * @param u {number}
-     * @param v {number}
+     * @param u {number} the source vertex.
+     * @param v {number} the target vertex.
      * @return {boolean} true a u->v edge exists, false otherwise.
      */
     adjacent(u, v) {
 
-        if (this.T.get(this.S.get(u)) === v) return true;
-        else return false;
+        // S : E -> V
+        // T : E -> V
+
+        var srcEdges = this.findEdgesBySourceVertex(u);
+
+        if(!srcEdges) return false;
+
+        for(var i = 0; i < srcEdges.length; i++){
+
+            if(this.T.get(srcEdges[i]) === v) return true;
+
+        }
+
+        return false;
 
     }
 
@@ -232,6 +244,15 @@ class Graph {
         this.V.splice(this.V.indexOf(x), 1);
 
         // remove relations in S
+        //      must remove all edges that use x as a source.
+
+        var edgesToRemove = this.findEdgesBySourceVertex(x);
+
+        for(var e = 0; e < edgesToRemove.length; e++){
+
+
+
+        }
 
         // remove relations in T
 
@@ -241,6 +262,34 @@ class Graph {
 
         return true;
     }
+
+    /**
+     * Removes an edge from the graph.
+     *
+     * @param x {number} id of the edge to remove.
+     * @returns {boolean} true if edge was successfully removed, false otherwise.
+     */
+    removeEdge(x){
+
+        if(this.E.indexOf(x) === -1) return false;
+
+        this.E.splice(this.E.indexOf(x), 1);
+
+        var result = true;
+
+        //remove edge from source and target relations
+
+        result = result && this.S.remove(x);
+        result = result && this.T.remove(x);
+
+        // remove all labels for the edge
+
+        result = result && this.Le.remove(x);
+
+        return result;
+
+    }
+
 
 }
 

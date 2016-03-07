@@ -105,19 +105,35 @@ class Morphism {
     }
 
     /**
-     * Removes the mapping between elements x and y.
-     * @param x
-     * @param y
+     * Removes the mapping between elements x and y. If only x is given removes
+     * x from the domain.
+     * @param x {Object} element from the domain to remove.
+     * @param y {Object} element from the codomain to remove.
      * @return {boolean} returns true if successfully removed, false otherwise.
      */
-    remove(x, y){
+    remove(x, y) {
 
-        if(!this._mapping[x]) return false;
-        if(this._mapping[x].indexOf(y) === -1) return false;
+        if (!this._mapping[x]) return false;
 
-        this._mapping[x].splice(this._mapping[x].indexOf(y), 1);
+        if (y !== null && y !== undefined) {
 
-        if(this._mapping[x].length === 0) delete this._mapping[x];
+            // Check that the thing we are removing is there...
+
+            if (this._mapping[x].indexOf(y) === -1) return false;
+
+            // remove y from x's mapping.
+            this._mapping[x].splice(this._mapping[x].indexOf(y), 1);
+
+            // only delete x from the domain if it has nothing to map to
+            // in the co-domain.
+            if (this._mapping[x].length === 0) delete this._mapping[x];
+
+        } else {
+
+            // if y is not defined we just remove all of x.
+            delete this._mapping[x];
+
+        }
 
         return true;
 
@@ -151,20 +167,20 @@ class Morphism {
 
         if (a) {
             return a[0]
-        }else{
+        } else {
             return null;
         }
     }
 
-    toString(){
+    toString() {
 
         var s = "{ ";
 
-        for(var k in this._mapping){
+        for (var k in this._mapping) {
 
-            for(var i = 0; i < this._mapping[k].length; i++){
+            for (var i = 0; i < this._mapping[k].length; i++) {
 
-                s += "("+k+","+this._mapping[k][i]+"), ";
+                s += "(" + k + "," + this._mapping[k][i] + "), ";
 
             }
 

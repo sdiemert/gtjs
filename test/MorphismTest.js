@@ -259,6 +259,35 @@ describe("Morphism", function () {
             assert.deepEqual(M.get(3), [30]);
         });
 
+        it("should remove the element from the domain", function(){
+
+            var r = M.remove(1); //not in the domain
+            assert.equal(r, true);
+
+            // make sure object is unchanged.
+            assert.deepEqual(M.getDomain(), [2, 3]);
+            assert.deepEqual(M.getCoDomain(), [20, 21, 30]);
+
+            assert.deepEqual(M.get(2), [20, 21]);
+            assert.deepEqual(M.get(3), [30]);
+
+        });
+
+        it("should return false if trying to remove element not in domain", function(){
+
+            var r = M.remove(10); //not in the domain
+            assert.equal(r, false);
+
+            // make sure object is unchanged.
+            assert.deepEqual(M.getDomain(), [1, 2, 3]);
+            assert.deepEqual(M.getCoDomain(), [10, 11, 20, 21, 30]);
+
+            assert.deepEqual(M.get(1), [10, 11]);
+            assert.deepEqual(M.get(2), [20, 21]);
+            assert.deepEqual(M.get(3), [30]);
+
+        });
+
     });
 
 });

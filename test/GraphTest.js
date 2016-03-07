@@ -316,4 +316,72 @@ describe("Graph", function () {
 
     });
 
+    describe("#removeEdge", function(){
+
+
+        var v1, v2, v3, e1, e2, e3;
+
+        beforeEach(function (done) {
+
+            //add vertices to work with...
+
+            v1 = G.addVertex();
+            v2 = G.addVertex();
+            v3 = G.addVertex();
+
+            // add edges...
+
+            e1 = G.addEdge(v1, v2, "foo");
+            e2 = G.addEdge(v2, v3, "bar");
+            e3 = G.addEdge(v1, v3, "bin");
+
+            done();
+
+        });
+
+        it("should remove the designated edge", function(){
+
+            var r = G.removeEdge(e1);
+
+            console.log(G.toString());
+
+            assert.equal(r, true);
+            assert.deepEqual(G.getEdges(), [2, 3]);
+            assert.equal(G.getEdgeLabel(e1), null);
+            assert.equal(G.getEdgeLabel(e2), "bar");
+            assert.equal(G.getEdgeLabel(e3), "bin");
+            assert.equal(G.adjacent(v2, v3), true);
+            assert.equal(G.adjacent(v1, v3), true);
+
+        });
+
+        it("should fail to remove an invalid edge", function(){
+
+            var r = G.removeEdge(100);
+
+            assert.equal(r, false);
+
+            // Ensure that the edge set remains un-changed.
+            assert.deepEqual(G.getEdges(), [1,2,3]);
+            assert.equal(G.adjacent(v2, v3), true);
+            assert.equal(G.adjacent(v1, v3), true);
+            assert.equal(G.adjacent(v1, v2), true);
+
+        });
+
+        it("should be able to remove multiple edges", function(){
+
+            var r1 = G.removeEdge(e1);
+            var r2 = G.removeEdge(e2);
+
+            assert.equal(r1, true);
+            assert.equal(r2, true);
+
+            assert.deepEqual(G.getEdges(), [3]);
+            assert.equal(G.adjacent(v1, v3), true);
+
+        });
+
+    });
+
 });
