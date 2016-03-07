@@ -1,1 +1,0 @@
-{"name":"M","nodes":[{"type":"root","newEntity":false,"name":0},{"type":"box","newEntity":false,"name":1},{"type":"box","newEntity":false,"name":2}],"edges":[{"end1":0,"end2":1,"direction":1,"value":{"type":null,"newEntity":false}},{"end1":0,"end2":2,"direction":1,"value":{"type":null,"newEntity":false}},{"end1":1,"end2":2,"direction":1,"value":{"type":null,"newEntity":true}}]}

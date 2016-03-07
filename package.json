@@ -1,0 +1,29 @@
+{
+  "name": "gtjs",
+  "version": "1.0.0",
+  "description": "graph transformation in JavaScript",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "clone": "^1.0.2"
+  },
+  "devDependencies": {
+    "mocha": "^2.4.5"
+  },
+  "scripts": {
+    "test": "mocha",
+    "coverage" : "istanbul cover _mocha -- -R spec test/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sdiemert/gtjs.git"
+  },
+  "author": "sdiemert",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sdiemert/gtjs/issues"
+  },
+  "homepage": "https://github.com/sdiemert/gtjs#readme"
+}
