@@ -114,11 +114,11 @@ class Graph {
         return this.Le.get(x);
     }
 
-    getEdgeLabels(){
+    getEdgeLabelFunction(){
         return this.Le;
     }
 
-    getVertexLabels(){
+    getVertexLabelFunction(){
         return this.Lv;
     }
 
@@ -310,6 +310,31 @@ class Graph {
         result = result && this.Le.remove(x);
 
         return result;
+
+    }
+
+    /**
+     * Creates a clone of the entire graph.
+     *
+     * @return {Graph}
+     */
+    clone(){
+
+        var H = new Graph(this.id);
+
+        H.V = this.V.slice(0);
+        H.E = this.E.slice(0);
+
+        H.vid_counter = this.vid_counter;
+        H.eid_counter = this.eid_counter;
+
+        H.S = this.S.clone();
+        H.T = this.T.clone();
+
+        H.Le = this.Le.clone();
+        H.Lv = this.Lv.clone();
+
+        return H;
 
     }
 

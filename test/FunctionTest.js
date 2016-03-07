@@ -11,6 +11,22 @@ var InvalidMorphismError = require("../src/Error.js").InvalidMorphismError;
 
 describe("Function", function () {
 
+    var F = null;
+
+    beforeEach(function(){
+
+        F = new Function();
+
+    });
+
+    afterEach(function(){
+
+        F = null;
+
+    });
+
+
+
     describe("#constructor", function () {
 
         it("should use the object passed in", function () {
@@ -50,6 +66,42 @@ describe("Function", function () {
             assert.throws(function () {
                 var M = new Function(o);
             }, InvalidMorphismError);
+        });
+
+    });
+
+    describe("#clone", function(){
+
+        beforeEach(function(){
+            F.put(1, 10);
+            F.put(2, 20);
+            F.put(3, 30);
+        });
+
+
+        it("should clone the Function", function(){
+
+            var X = F.clone();
+
+            assert.deepEqual(X.getDomain(), [1,2,3]);
+            assert.deepEqual(X.getCoDomain(), [10,20,30]);
+
+        });
+
+        it("should make a copy of the Function", function(){
+
+            var X = F.clone();
+
+            X.remove(1);
+
+            // X should have changed.
+            assert.deepEqual(X.getDomain(), [2,3]);
+            assert.deepEqual(X.getCoDomain(), [20,30]);
+
+            // F should not have changed.
+            assert.deepEqual(F.getDomain(), [1,2,3]);
+            assert.deepEqual(F.getCoDomain(), [10,20,30]);
+
         });
 
     });

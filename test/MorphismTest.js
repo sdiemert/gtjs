@@ -290,4 +290,55 @@ describe("Morphism", function () {
 
     });
 
+    describe("#clone", function(){
+
+        var M = null;
+
+        beforeEach( function(){
+
+            M = new Morphism();
+            M.put(1, 10);
+            M.put(1, 11);
+            M.put(2, 20);
+            M.put(2, 21);
+            M.put(3, 30);
+
+        });
+
+        afterEach(function(){
+
+            M = null;
+
+        });
+
+        it("should clone the entire morphism", function(){
+
+            var X = M.clone();
+
+            assert.deepEqual(X.get(1), [10, 11]);
+            assert.deepEqual(X.get(2), [20, 21]);
+            assert.deepEqual(X.get(3), [30]);
+
+        });
+
+        it("should make a copy", function(){
+
+            var X = M.clone();
+
+            X.remove(1, 10);
+
+            // X should have changed.
+            assert.deepEqual(X.get(1), [11]);
+            assert.deepEqual(X.get(2), [20, 21]);
+            assert.deepEqual(X.get(3), [30]);
+
+            // M should not have changed.
+            assert.deepEqual(M.get(1), [10, 11]);
+            assert.deepEqual(M.get(2), [20, 21]);
+            assert.deepEqual(M.get(3), [30]);
+
+        });
+
+    });
+
 });

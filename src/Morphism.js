@@ -192,6 +192,22 @@ class Morphism {
 
     }
 
+    /**
+     *
+     * @returns {Morphism}
+     */
+    clone(){
+
+        var M = new Morphism();
+
+        M._mapping = JSON.parse(JSON.stringify(this._mapping));
+
+        M.structureOk();
+
+        return M;
+
+    }
+
 }
 
 module.exports = {Morphism: Morphism};

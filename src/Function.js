@@ -56,6 +56,21 @@ class Function extends Morphism {
         else null;
     }
 
+    /**
+     * @return {Function}
+     */
+    clone(){
+
+        var F = new Function();
+
+        F._mapping = JSON.parse(JSON.stringify(this._mapping));
+
+        F.structureOk();
+
+        return F;
+
+    }
+
 }
 
 module.exports = {Function: Function};

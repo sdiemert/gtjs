@@ -343,8 +343,6 @@ describe("Graph", function () {
 
             var r = G.removeEdge(e1);
 
-            console.log(G.toString());
-
             assert.equal(r, true);
             assert.deepEqual(G.getEdges(), [2, 3]);
             assert.equal(G.getEdgeLabel(e1), null);
@@ -429,6 +427,67 @@ describe("Graph", function () {
             }, GraphInvalidError);
 
             assert.equal(r, false);
+            assert.deepEqual(G.getVertices(), [v1, v2, v3]);
+            assert.deepEqual(G.getEdges(), [e1, e2, e3]);
+
+        });
+
+    });
+
+    describe("#removeVertex", function() {
+
+        var v1, v2, v3, e1, e2, e3;
+
+        beforeEach(function (done) {
+
+            //add vertices to work with...
+
+            v1 = G.addVertex("v1");
+            v2 = G.addVertex();
+            v3 = G.addVertex();
+
+            // add edges...
+
+            e1 = G.addEdge(v1, v2, "foo");
+            e2 = G.addEdge(v2, v3, "bar");
+            e3 = G.addEdge(v1, v3, "bin");
+
+            done();
+
+        });
+
+        it("should clone the graph", function(){
+
+            var H = G.clone();
+
+            // ensure the two graphs are the same...
+            assert.deepEqual(H.getVertices(), [v1, v2, v3]);
+            assert.deepEqual(H.getEdges(), [e1, e2, e3]);
+            assert.deepEqual(H.getSourceMorphism().getDomain(), [e1, e2, e3]);
+            assert.deepEqual(H.getSourceMorphism().getCoDomain(), [v1, v2]);
+            assert.deepEqual(H.getTargetMorphism().getDomain(), [e1, e2, e3]);
+            assert.deepEqual(H.getTargetMorphism().getCoDomain(), [v2, v3]);
+            assert.deepEqual(H.getVertexLabel(v1), "v1");
+            assert.deepEqual(H.getEdgeLabelFunction().getCoDomain(), ["foo", "bar", "bin"]);
+
+            assert.equal(G.vid_counter, H.vid_counter);
+            assert.equal(G.eid_counter, H.eid_counter);
+
+        });
+
+        it("should make a new copy of the graph", function(){
+
+            var H = G.clone();
+
+            H.removeVertex(v1);
+
+            var v4 = H.addVertex('v4');
+
+            var e4 = H.addEdge(v2, v4, 'e4');
+
+            assert.deepEqual(H.getVertices(), [v2, v3, v4]);
+            assert.deepEqual(H.getEdges(), [e2, e4]);
+
             assert.deepEqual(G.getVertices(), [v1, v2, v3]);
             assert.deepEqual(G.getEdges(), [e1, e2, e3]);
 
