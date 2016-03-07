@@ -105,6 +105,25 @@ class Morphism {
     }
 
     /**
+     * Removes the mapping between elements x and y.
+     * @param x
+     * @param y
+     * @return {boolean} returns true if successfully removed, false otherwise.
+     */
+    remove(x, y){
+
+        if(!this._mapping[x]) return false;
+        if(this._mapping[x].indexOf(y) === -1) return false;
+
+        this._mapping[x].splice(this._mapping[x].indexOf(y), 1);
+
+        if(this._mapping[x].length === 0) delete this._mapping[x];
+
+        return true;
+
+    }
+
+    /**
      * Gets all of the value mapped from x.
      * @param x {Object}
      * @returns {Array}

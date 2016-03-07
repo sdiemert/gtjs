@@ -114,6 +114,22 @@ class Graph {
         return this.Le.get(x);
     }
 
+    getEdgeLabels(){
+        return this.Le;
+    }
+
+    getVertexLabels(){
+        return this.Lv;
+    }
+
+    getSourceMorphism(){
+        return this.S;
+    }
+
+    getTargetMorphism(){
+        return this.T;
+    }
+
     /**
      * Determines if there is an edge: u -> v.
      * @param u {number}

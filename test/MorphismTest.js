@@ -172,4 +172,93 @@ describe("Morphism", function () {
 
     });
 
+    describe("#remove", function(){
+
+        var M = null;
+
+        beforeEach( function(){
+
+            M = new Morphism();
+            M.put(1, 10);
+            M.put(1, 11);
+            M.put(2, 20);
+            M.put(2, 21);
+            M.put(3, 30);
+
+        });
+
+        afterEach(function(){
+
+            M = null;
+
+        });
+
+        it("should remove an existing mapping", function(){
+            var r = M.remove(1, 10);
+            assert.equal(r, true);
+
+            assert.deepEqual(M.getDomain(), [1, 2, 3]);
+            assert.deepEqual(M.getCoDomain(), [11, 20, 21, 30]);
+
+            assert.deepEqual(M.get(1), [11]);
+            assert.deepEqual(M.get(2), [20, 21]);
+            assert.deepEqual(M.get(3), [30]);
+        });
+
+        it("should remove the element from the domain if it has nothing to map to", function(){
+            var r = M.remove(3, 30);
+            assert.equal(r, true);
+
+            assert.deepEqual(M.getDomain(), [1, 2]);
+            assert.deepEqual(M.getCoDomain(), [10, 11, 20, 21]);
+
+            assert.deepEqual(M.get(1), [10, 11]);
+            assert.deepEqual(M.get(2), [20, 21]);
+
+            assert.equal(M.get(3), null);
+
+        });
+
+        it("should return false if element is not in the domain", function(){
+            var r = M.remove(100, 10); //not in the domain
+            assert.equal(r, false);
+
+            // make sure object is unchanged.
+            assert.deepEqual(M.getDomain(), [1, 2, 3]);
+            assert.deepEqual(M.getCoDomain(), [10, 11, 20, 21, 30]);
+
+            assert.deepEqual(M.get(1), [10, 11]);
+            assert.deepEqual(M.get(2), [20, 21]);
+            assert.deepEqual(M.get(3), [30]);
+
+        });
+
+        it("should return false if element is not in the co domain", function(){
+            var r = M.remove(100, 10); //not in the domain
+            assert.equal(r, false);
+
+            // make sure object is unchanged.
+            assert.deepEqual(M.getDomain(), [1, 2, 3]);
+            assert.deepEqual(M.getCoDomain(), [10, 11, 20, 21, 30]);
+
+            assert.deepEqual(M.get(1), [10, 11]);
+            assert.deepEqual(M.get(2), [20, 21]);
+            assert.deepEqual(M.get(3), [30]);
+        });
+
+        it("should return false if the arguments are in neither domain or co domain", function(){
+            var r = M.remove(100, 100); //not in the domain
+            assert.equal(r, false);
+
+            // make sure object is unchanged.
+            assert.deepEqual(M.getDomain(), [1, 2, 3]);
+            assert.deepEqual(M.getCoDomain(), [10, 11, 20, 21, 30]);
+
+            assert.deepEqual(M.get(1), [10, 11]);
+            assert.deepEqual(M.get(2), [20, 21]);
+            assert.deepEqual(M.get(3), [30]);
+        });
+
+    });
+
 });
