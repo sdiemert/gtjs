@@ -14,7 +14,18 @@ function InvalidMorphismError(m){
     this.message = m;
 
 }
+/**
+ *
+ * @param m {String} a message for the error.
+ * @constructor
+ */
+function InvalidFunctionError(m){
+
+    this.message = m;
+
+}
 
 module.exports = {
-    InvalidMorphismError : InvalidMorphismError
+    InvalidMorphismError : InvalidMorphismError,
+    InvalidFunctionError : InvalidFunctionError
 };

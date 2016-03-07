@@ -19,7 +19,7 @@ class Morphism {
      */
     constructor(m) {
 
-        if (!arguments.length) {
+        if (!m) {
 
             this._mapping = {};
 
