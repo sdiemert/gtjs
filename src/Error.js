@@ -25,7 +25,15 @@ function InvalidFunctionError(m){
 
 }
 
+function GraphInvalidError(m){
+
+    this.message = m;
+
+}
+
 module.exports = {
     InvalidMorphismError : InvalidMorphismError,
-    InvalidFunctionError : InvalidFunctionError
+    InvalidFunctionError : InvalidFunctionError,
+    GraphInvalidError    : GraphInvalidError
+
 };

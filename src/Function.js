@@ -44,6 +44,37 @@ class Function extends Morphism {
 
     }
 
+    /**
+     * Should return a single element, since this a function.
+     *
+     * @param x
+     * @returns {Object}
+     */
+    get(x){
+        var r = super.get(x);
+
+        if(r) return r[0];
+    }
+
+    toString(){
+
+        var s = "{ ";
+
+        for(var k in this._mapping){
+
+            for(var i = 0; i < this._mapping[k].length; i++){
+
+                s += "("+k+","+this._mapping[k][i]+"), ";
+
+            }
+
+        }
+
+        s += "}";
+
+        return s;
+
+    }
 
 }
 
