@@ -27,5 +27,6 @@ class GraphMorphism {
 
     }
 
-
 }
+
+module.exports = {GraphMorphism : GraphMorphism};

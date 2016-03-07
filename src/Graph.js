@@ -132,6 +132,7 @@ class Graph {
 
     /**
      * Determines if there is an edge: u -> v.
+     *
      * @param u {number}
      * @param v {number}
      * @return {boolean} true a u->v edge exists, false otherwise.
@@ -141,6 +142,44 @@ class Graph {
         if (this.T.get(this.S.get(u)) === v) return true;
         else return false;
 
+    }
+
+    /**
+     * Finds edges that have their source identified by x.
+     *
+     * @param x {number} id of the vertex to look for.
+     * @return {Array | null} the ids of edges that have x as their source, null if x is invalid vertex.
+     */
+    findEdgesBySourceVertex(x){
+
+        if(this.V.indexOf(x) === -1) return null;
+
+        var toReturn = [];
+
+        for(var i = 0; i < this.E.length; i++){
+            if(this.S.get(this.E[i]) === x) toReturn.push(this.E[i]);
+        }
+
+        return toReturn;
+    }
+
+    /**
+     * Find edges that have their target identified by x.
+     *
+     * @param x {number} id of the vertex to look for.
+     * @return {Array | null} the ids of edges that have x as their target, null if x is invalid vertex.
+     */
+    findEdgesByTargetVertex(x){
+
+        if(this.V.indexOf(x) === -1) return null;
+
+        var toReturn = [];
+
+        for(var i = 0; i < this.E.length; i++){
+            if(this.T.get(this.E[i]) === x) toReturn.push(this.E[i]);
+        }
+
+        return toReturn;
     }
 
     /**
@@ -177,6 +216,30 @@ class Graph {
 
         return s;
 
+    }
+
+    /**
+     * Attempts to remove a vertex from the Graph.
+     *
+     * @param x {number} the id of the vertex to remove
+     * @return {boolean} true if removed successfully, false otherwise.
+     */
+    removeVertex(x){
+
+        if(!this.V[x]) return false;
+
+        // remove the vertex.
+        this.V.splice(this.V.indexOf(x), 1);
+
+        // remove relations in S
+
+        // remove relations in T
+
+        // remove relations in Lv
+
+        // remove relations in Le
+
+        return true;
     }
 
 }

@@ -238,4 +238,82 @@ describe("Graph", function () {
 
     });
 
+    describe("#findEdgesBySourceVertex", function(){
+
+        var v1, v2, v3, e1, e2, e3;
+
+        beforeEach(function (done) {
+
+            //add vertices to work with...
+
+            v1 = G.addVertex();
+            v2 = G.addVertex();
+            v3 = G.addVertex();
+
+            // add edges...
+
+            e1 = G.addEdge(v1, v2);
+            e2 = G.addEdge(v2, v3);
+            e3 = G.addEdge(v1, v3);
+
+            done();
+
+        });
+
+        it("should return two edges", function(){
+            var A = G.findEdgesBySourceVertex(v1);
+            assert.deepEqual(A, [1, 3]);
+        });
+
+        it("should return no edges if it is empty", function(){
+            var A = G.findEdgesBySourceVertex(v3);
+            assert.deepEqual(A, []);
+        });
+
+        it("should return null if the argument is not a valid vertex", function(){
+            var A = G.findEdgesBySourceVertex(10);
+            assert.equal(A, null);
+        });
+
+    });
+
+    describe("#findEdgesByTargetVertex", function(){
+
+        var v1, v2, v3, e1, e2, e3;
+
+        beforeEach(function (done) {
+
+            //add vertices to work with...
+
+            v1 = G.addVertex();
+            v2 = G.addVertex();
+            v3 = G.addVertex();
+
+            // add edges...
+
+            e1 = G.addEdge(v1, v2);
+            e2 = G.addEdge(v2, v3);
+            e3 = G.addEdge(v1, v3);
+
+            done();
+
+        });
+
+        it("should return two edges", function(){
+            var A = G.findEdgesByTargetVertex(v3);
+            assert.deepEqual(A, [2, 3]);
+        });
+
+        it("should return no edges if it is empty", function(){
+            var A = G.findEdgesByTargetVertex(v1);
+            assert.deepEqual(A, []);
+        });
+
+        it("should return null if the argument is not a valid vertex", function(){
+            var A = G.findEdgesBySourceVertex(10);
+            assert.equal(A, null);
+        });
+
+    });
+
 });
