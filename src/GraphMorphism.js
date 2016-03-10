@@ -15,6 +15,9 @@
  *  - H.Lv(Fv(x)) = G.Lv(x)
  *  - H.Le(Fv(x)) = G.Le(x)
  */
+
+var Function = require("./Function.js").Function;
+
 class GraphMorphism {
 
     constructor(src, target) {

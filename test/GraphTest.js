@@ -115,9 +115,9 @@ describe("Graph", function () {
 
         });
 
-        it("should throw an error if invalid source vertex id is passed", function(){
+        it("should throw an error if invalid source vertex id is passed", function () {
 
-            assert.throws(function(){
+            assert.throws(function () {
 
                 var e1 = G.addEdge(10, 1);
 
@@ -125,9 +125,9 @@ describe("Graph", function () {
 
         });
 
-        it("should throw an error if invalid target vertex id is passed", function(){
+        it("should throw an error if invalid target vertex id is passed", function () {
 
-            assert.throws(function(){
+            assert.throws(function () {
 
                 var e1 = G.addEdge(1, 10);
 
@@ -135,9 +135,9 @@ describe("Graph", function () {
 
         });
 
-        it("should throw an error if no source vertex is passed", function(){
+        it("should throw an error if no source vertex is passed", function () {
 
-            assert.throws(function(){
+            assert.throws(function () {
 
                 var e1 = G.addEdge(null, 1);
 
@@ -145,9 +145,9 @@ describe("Graph", function () {
 
         });
 
-        it("should throw an error if no target vertex is passed", function(){
+        it("should throw an error if no target vertex is passed", function () {
 
-            assert.throws(function(){
+            assert.throws(function () {
 
                 var e1 = G.addEdge(1);
 
@@ -155,9 +155,9 @@ describe("Graph", function () {
 
         });
 
-        it("should throw an error if no source or target vertices are passed", function(){
+        it("should throw an error if no source or target vertices are passed", function () {
 
-            assert.throws(function(){
+            assert.throws(function () {
 
                 var e1 = G.addEdge();
 
@@ -167,7 +167,7 @@ describe("Graph", function () {
 
     });
 
-    describe("#adjacent", function(){
+    describe("#adjacent", function () {
 
         var v1, v2, v3, e1, e2;
 
@@ -188,25 +188,25 @@ describe("Graph", function () {
 
         });
 
-        it("should return true if the vertices are adjacent", function(){
+        it("should return true if the vertices are adjacent", function () {
             assert.equal(G.adjacent(v1, v2), true);
         });
 
-        it("should return false if the vertices are not adjacent", function(){
+        it("should return false if the vertices are not adjacent", function () {
             assert.equal(G.adjacent(v1, v3), false);
         });
 
-        it("should return false if an invalid vertex is passed for param u", function(){
+        it("should return false if an invalid vertex is passed for param u", function () {
             assert.equal(G.adjacent(10, v3), false);
         });
 
-        it("should return false if an invalid vertex is passed for param v", function(){
+        it("should return false if an invalid vertex is passed for param v", function () {
             assert.equal(G.adjacent(v1, 10), false);
         });
 
     });
 
-    describe("#getEdge", function() {
+    describe("#getEdge", function () {
 
         var v1, v2, v3, e1, e2;
 
@@ -227,18 +227,18 @@ describe("Graph", function () {
 
         });
 
-        it("should return correct edge id", function(){
+        it("should return correct edge id", function () {
             assert.equal(G.getEdge(v1, v2), e1);
             assert.equal(G.getEdge(v2, v3), e2);
         });
 
-        it("should return null if vertices are invalid", function(){
+        it("should return null if vertices are invalid", function () {
             assert.equal(G.getEdge(10, 11), null);
         });
 
     });
 
-    describe("#findEdgesBySourceVertex", function(){
+    describe("#findEdgesBySourceVertex", function () {
 
         var v1, v2, v3, e1, e2, e3;
 
@@ -260,24 +260,24 @@ describe("Graph", function () {
 
         });
 
-        it("should return two edges", function(){
+        it("should return two edges", function () {
             var A = G.findEdgesBySourceVertex(v1);
             assert.deepEqual(A, [1, 3]);
         });
 
-        it("should return no edges if it is empty", function(){
+        it("should return no edges if it is empty", function () {
             var A = G.findEdgesBySourceVertex(v3);
             assert.deepEqual(A, []);
         });
 
-        it("should return null if the argument is not a valid vertex", function(){
+        it("should return null if the argument is not a valid vertex", function () {
             var A = G.findEdgesBySourceVertex(10);
             assert.equal(A, null);
         });
 
     });
 
-    describe("#findEdgesByTargetVertex", function(){
+    describe("#findEdgesByTargetVertex", function () {
 
         var v1, v2, v3, e1, e2, e3;
 
@@ -299,24 +299,24 @@ describe("Graph", function () {
 
         });
 
-        it("should return two edges", function(){
+        it("should return two edges", function () {
             var A = G.findEdgesByTargetVertex(v3);
             assert.deepEqual(A, [2, 3]);
         });
 
-        it("should return no edges if it is empty", function(){
+        it("should return no edges if it is empty", function () {
             var A = G.findEdgesByTargetVertex(v1);
             assert.deepEqual(A, []);
         });
 
-        it("should return null if the argument is not a valid vertex", function(){
+        it("should return null if the argument is not a valid vertex", function () {
             var A = G.findEdgesBySourceVertex(10);
             assert.equal(A, null);
         });
 
     });
 
-    describe("#removeEdge", function(){
+    describe("#removeEdge", function () {
 
 
         var v1, v2, v3, e1, e2, e3;
@@ -339,7 +339,7 @@ describe("Graph", function () {
 
         });
 
-        it("should remove the designated edge", function(){
+        it("should remove the designated edge", function () {
 
             var r = G.removeEdge(e1);
 
@@ -353,21 +353,21 @@ describe("Graph", function () {
 
         });
 
-        it("should fail to remove an invalid edge", function(){
+        it("should fail to remove an invalid edge", function () {
 
             var r = G.removeEdge(100);
 
             assert.equal(r, false);
 
             // Ensure that the edge set remains un-changed.
-            assert.deepEqual(G.getEdges(), [1,2,3]);
+            assert.deepEqual(G.getEdges(), [1, 2, 3]);
             assert.equal(G.adjacent(v2, v3), true);
             assert.equal(G.adjacent(v1, v3), true);
             assert.equal(G.adjacent(v1, v2), true);
 
         });
 
-        it("should be able to remove multiple edges", function(){
+        it("should be able to remove multiple edges", function () {
 
             var r1 = G.removeEdge(e1);
             var r2 = G.removeEdge(e2);
@@ -382,7 +382,7 @@ describe("Graph", function () {
 
     });
 
-    describe("#removeVertex", function(){
+    describe("#removeVertex", function () {
 
         var v1, v2, v3, e1, e2, e3;
 
@@ -404,11 +404,11 @@ describe("Graph", function () {
 
         });
 
-        it("should remove the vertex and all associated edges", function(){
+        it("should remove the vertex and all associated edges", function () {
 
             var r = false;
 
-            assert.doesNotThrow(function(){
+            assert.doesNotThrow(function () {
                 r = G.removeVertex(v1);
             }, GraphInvalidError);
 
@@ -418,11 +418,11 @@ describe("Graph", function () {
 
         });
 
-        it("should fail to remove a vertex if it does not exist", function(){
+        it("should fail to remove a vertex if it does not exist", function () {
 
             var r = false;
 
-            assert.doesNotThrow(function(){
+            assert.doesNotThrow(function () {
                 r = G.removeVertex(10);
             }, GraphInvalidError);
 
@@ -434,7 +434,7 @@ describe("Graph", function () {
 
     });
 
-    describe("#removeVertex", function() {
+    describe("#removeVertex", function () {
 
         var v1, v2, v3, e1, e2, e3;
 
@@ -456,7 +456,7 @@ describe("Graph", function () {
 
         });
 
-        it("should clone the graph", function(){
+        it("should clone the graph", function () {
 
             var H = G.clone();
 
@@ -475,7 +475,7 @@ describe("Graph", function () {
 
         });
 
-        it("should make a new copy of the graph", function(){
+        it("should make a new copy of the graph", function () {
 
             var H = G.clone();
 
@@ -492,6 +492,116 @@ describe("Graph", function () {
             assert.deepEqual(G.getEdges(), [e1, e2, e3]);
 
         });
+
+    });
+
+    describe("#toMatrix", function () {
+
+        var v1, v2, v3, e1, e2, e3;
+
+        beforeEach(function (done) {
+
+            //add vertices to work with...
+
+            v1 = G.addVertex("v1");
+            v2 = G.addVertex();
+            v3 = G.addVertex();
+
+            // add edges...
+
+            e1 = G.addEdge(v1, v2, "foo");
+            e2 = G.addEdge(v2, v3, "bar");
+            e3 = G.addEdge(v1, v3, "bin");
+
+            done();
+
+        });
+
+        it("should produce a valid matrix", function () {
+
+            var M = G.toMatrix();
+
+            var E = [
+                [0, 1, 1],
+                [0, 0, 1],
+                [0, 0, 0]
+            ];
+
+            assert.equal(M.length, 3);
+            assert.deepEqual(E, M);
+
+        });
+
+        it("should produce an array of zeros for unconnected graph", function () {
+
+            G.removeEdge(e1);
+            G.removeEdge(e2);
+            G.removeEdge(e3);
+
+            var M = G.toMatrix();
+
+            var E = [
+                [0, 0, 0],
+                [0, 0, 0],
+                [0, 0, 0]
+            ];
+
+            assert.equal(M.length, 3);
+            assert.deepEqual(E, M);
+
+        });
+
+        it("should produce an empty array", function () {
+
+            var r1 = G.removeVertex(v1);
+            var r2 = G.removeVertex(v2);
+            var r3 = G.removeVertex(v3);
+
+            var M = G.toMatrix();
+
+            var E = [];
+
+            assert.equal(r1, true);
+            assert.equal(r2, true);
+            assert.equal(r3, true);
+            assert.deepEqual(E, M);
+
+
+
+        });
+
+    });
+
+    describe("#degree", function(){
+
+        var v1, v2, v3, e1, e2, e3;
+
+        beforeEach(function (done) {
+
+            //add vertices to work with...
+
+            v1 = G.addVertex("v1");
+            v2 = G.addVertex();
+            v3 = G.addVertex();
+
+            // add edges...
+
+            e1 = G.addEdge(v1, v2, "foo");
+            e2 = G.addEdge(v2, v3, "bar");
+            e3 = G.addEdge(v1, v3, "bin");
+
+            done();
+
+        });
+
+        it("should return the correct degree", function(){
+
+            assert.equal(G.degree(v1), 2);
+            assert.equal(G.degree(v2), 1);
+            assert.equal(G.degree(v3), 0);
+
+        });
+
 
     });
 

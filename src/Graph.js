@@ -16,8 +16,8 @@ class Graph {
         this.E = [];
         this.V = [];
 
-        this.S  = new Function(); // S : E -> V
-        this.T  = new Function(); // T : E -> V
+        this.S = new Function(); // S : E -> V
+        this.T = new Function(); // T : E -> V
         this.Le = new Function(); // Le : E -> Alphabet
         this.Lv = new Function(); // Lv : V -> Alphabet
 
@@ -44,7 +44,7 @@ class Graph {
     /**
      * Adds a vertex to the graph with an optional label.
      *
-     * @param label {Object} optional label to add to the vertex.
+     * @param label {Object|undefined} optional label to add to the vertex.
      * @returns {number}
      */
     addVertex(label) {
@@ -84,6 +84,8 @@ class Graph {
      */
     addEdge(src, target, label) {
 
+        label = label || "" + this.eid_counter;
+
         if (!src || !target) {
             throw new Error("Cannot create edge without source and target vertices.");
         }
@@ -114,19 +116,19 @@ class Graph {
         return this.Le.get(x);
     }
 
-    getEdgeLabelFunction(){
+    getEdgeLabelFunction() {
         return this.Le;
     }
 
-    getVertexLabelFunction(){
+    getVertexLabelFunction() {
         return this.Lv;
     }
 
-    getSourceMorphism(){
+    getSourceMorphism() {
         return this.S;
     }
 
-    getTargetMorphism(){
+    getTargetMorphism() {
         return this.T;
     }
 
@@ -144,11 +146,11 @@ class Graph {
 
         var srcEdges = this.findEdgesBySourceVertex(u);
 
-        if(!srcEdges) return false;
+        if (!srcEdges) return false;
 
-        for(var i = 0; i < srcEdges.length; i++){
+        for (var i = 0; i < srcEdges.length; i++) {
 
-            if(this.T.get(srcEdges[i]) === v) return true;
+            if (this.T.get(srcEdges[i]) === v) return true;
 
         }
 
@@ -162,14 +164,14 @@ class Graph {
      * @param x {number} id of the vertex to look for.
      * @return {Array | null} the ids of edges that have x as their source, null if x is invalid vertex.
      */
-    findEdgesBySourceVertex(x){
+    findEdgesBySourceVertex(x) {
 
-        if(this.V.indexOf(x) === -1) return null;
+        if (this.V.indexOf(x) === -1) return null;
 
         var toReturn = [];
 
-        for(var i = 0; i < this.E.length; i++){
-            if(this.S.get(this.E[i]) === x) toReturn.push(this.E[i]);
+        for (var i = 0; i < this.E.length; i++) {
+            if (this.S.get(this.E[i]) === x) toReturn.push(this.E[i]);
         }
 
         return toReturn;
@@ -181,14 +183,14 @@ class Graph {
      * @param x {number} id of the vertex to look for.
      * @return {Array | null} the ids of edges that have x as their target, null if x is invalid vertex.
      */
-    findEdgesByTargetVertex(x){
+    findEdgesByTargetVertex(x) {
 
-        if(this.V.indexOf(x) === -1) return null;
+        if (this.V.indexOf(x) === -1) return null;
 
         var toReturn = [];
 
-        for(var i = 0; i < this.E.length; i++){
-            if(this.T.get(this.E[i]) === x) toReturn.push(this.E[i]);
+        for (var i = 0; i < this.E.length; i++) {
+            if (this.T.get(this.E[i]) === x) toReturn.push(this.E[i]);
         }
 
         return toReturn;
@@ -231,18 +233,77 @@ class Graph {
     }
 
     /**
+     * Produces an adjacency matrix for this graph.
+     *
+     * @returns {Array} A 2D array, cells that are 1 represent an adjacent x,y pair
+     */
+    toMatrix() {
+
+        var MAT = [];
+
+        var T = [];
+
+        for (var i = 0; i < this.V.length; i++) {
+
+            T = [];
+            for (var j = 0; j < this.V.length; j++) {
+
+                T.push(0);
+
+            }
+
+            MAT.push(T);
+        }
+
+        for (var i = 0; i < this.V.length; i++) {
+
+            for (var j = 0; j < this.V.length; j++) {
+
+                if (this.adjacent(this.V[i], this.V[j])) MAT[i][j] = 1;
+
+            }
+
+        }
+
+        return MAT;
+
+    }
+
+    toMatrixString() {
+
+        var MAT = this.toMatrix();
+
+        var s = "";
+
+        for (var i = 0; i < MAT.length; i++) {
+
+            for (var j = 0; j < MAT.length; j++) {
+
+                s += MAT[i][j] + " "
+
+            }
+
+            s += "\n"
+
+        }
+
+        return s;
+
+    }
+
+    /**
      * Attempts to remove a vertex from the Graph.
      *
      * @param x {number} the id of the vertex to remove
      * @return {boolean} true if removed successfully, false otherwise.
      */
-    removeVertex(x){
+    removeVertex(x) {
 
         // TODO: this function may leave the graph in a partially
         //  valid state.... We would like that if this fails it will
         //  revert to the previous state.
 
-        if(!this.V[x]) return false;
+        if (this.V.indexOf(x) === -1) return false;
 
         // remove relations in S
         //      must remove all edges that use x as a source.
@@ -292,9 +353,9 @@ class Graph {
      * @param x {number} id of the edge to remove.
      * @returns {boolean} true if edge was successfully removed, false otherwise.
      */
-    removeEdge(x){
+    removeEdge(x) {
 
-        if(this.E.indexOf(x) === -1) return false;
+        if (this.E.indexOf(x) === -1) return false;
 
         this.E.splice(this.E.indexOf(x), 1);
 
@@ -318,7 +379,7 @@ class Graph {
      *
      * @return {Graph}
      */
-    clone(){
+    clone() {
 
         var H = new Graph(this.id);
 
@@ -335,6 +396,37 @@ class Graph {
         H.Lv = this.Lv.clone();
 
         return H;
+
+    }
+
+    /**
+     * Find the degree (number of out-going edges) from the vertex
+     * identified by v.
+     *
+     * @param v {number} the id of the vertex to get the degree for.
+     *
+     * @return {number|null} the degree of the vertex identified by v, null if v is invalid.
+     */
+    degree(v) {
+
+        if (this.V.indexOf(v) === -1) return null;
+
+        else return this.findEdgesBySourceVertex(v).length;
+
+    }
+
+    /**
+     * Find the co-degree (number of incident edges) for the vertex idenitfied
+     * by v.
+     *
+     * @param v {number}
+     * @returns {number | null}
+     */
+    coDegree(v){
+
+        if (this.V.indexOf(v) === -1) return null;
+
+        else return this.findEdgesByTargetVertex(v).length;
 
     }
 
