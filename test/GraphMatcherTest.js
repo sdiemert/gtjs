@@ -384,7 +384,6 @@ describe("GraphMatcher", function () {
 
             assert.notDeepEqual(m, null);
 
-
         });
 
 
