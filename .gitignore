@@ -11,4 +11,5 @@ gen
 #type script files
 bin/
 node_modules/
+coverage/
 
