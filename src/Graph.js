@@ -1,6 +1,7 @@
 "use strict";
 /**
  * Created by sdiemert on 2016-03-06.
+ * The basic Graph class
  */
 
 var Function          = require("./Function.js").Function;
