@@ -7,7 +7,8 @@
     "test": "test"
   },
   "dependencies": {
-    "clone": "^1.0.2"
+    "clone": "^1.0.2",
+    "subgraph-isomorphism": "^1.0.0"
   },
   "devDependencies": {
     "mocha": "^2.4.5"
