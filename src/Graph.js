@@ -207,6 +207,54 @@ class Data{
     }
 }
 
+class StringData extends Data{
+
+    /**
+     * @param s {string}
+     */
+    constructor(s){
+        super();
+
+        this._value = s;
+    }
+
+    get value(){
+        return this._value;
+    }
+
+    /**
+     * @param d {Data}
+     */
+    compare(d){
+        if(d instanceof StringData){
+            return d.value === this.value;
+        }else{
+            return false;
+        }
+    }
+}
+
+class NumberData extends Data{
+
+    /**
+     * @param n {number}
+     */
+    constructor(n){
+        super();
+        this._value = n;
+    }
+
+    get value() {return this._value;}
+
+    compare(d){
+        if(d instanceof NumberData){
+            return d.value === this.value;
+        }else{
+            return false;
+        }
+    }
+}
+
 /**
  * Maps from a matching graph (H) into
  * a parent graph (G)
@@ -247,5 +295,7 @@ module.exports = {
     Node : Node,
     Edge : Edge,
     Data : Data,
-    Morphism : Morphism
+    Morphism : Morphism,
+    NumberData : NumberData,
+    StringData : StringData
 };

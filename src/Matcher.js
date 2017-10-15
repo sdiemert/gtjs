@@ -25,7 +25,9 @@ function findMorphism(G, H){
                 // both nodes - make sure they have the same degree.
                 return (
                     (iso.priv.arraySum(P[p]) <= iso.priv.arraySum(Q[q])) &&
-                    (gNode.type === hNode.type) //TODO: Compare data types.
+                    (gNode.type === hNode.type) &&
+                    ((gNode.data === null && hNode.data === null)
+                        || gNode.data.compare(hNode.data))
                 );
             }else if(!gNode && !hNode){
                 // both edges

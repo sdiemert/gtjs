@@ -1,3 +1,4 @@
+"use strict";
 /**
  * Create by sdiemert on 2017-10-15
  *
@@ -5,27 +6,66 @@
  */
 
 var assert        = require('assert');
-var model = require('../src/Graph.js');
+var Graph = require('../src/Graph.js').Graph;
+var Data = require('../src/Graph.js').Data;
+var NumberData = require('../src/Graph.js').NumberData;
+var StringData = require('../src/Graph.js').StringData;
+var Node = require('../src/Graph.js').Node;
+var Edge = require('../src/Graph.js').Edge;
 
-describe("Model", function () {
+describe("Graph", function () {
 
-    describe("#Graph()", function () {
+    describe("#getAdjacent()", function () {
 
         it("should identify adjacent", function () {
 
-            const G = new model.Graph();
-            const n0 = new model.Node("n0", "type", new model.Data());
-            const n1 = new model.Node("n1", "type", new model.Data());
+            const G = new Graph();
+            const n0 = new Node("n0", "type", new Data());
+            const n1 = new Node("n1", "type", new Data());
             G.addNode(n0);
             G.addNode(n1);
-            G.addEdge(new model.Edge("e1", "type", "n0", "n1"));
+            G.addEdge(new Edge("e1", "type", "n0", "n1"));
 
             assert.notEqual(G.isAdjacent(n0, n1), null);
+        });
+    });
 
+});
+
+describe("Data", function () {
+
+    describe("#compare()", function () {
+
+        it("should throw if try to compare on Data abstract object", function () {
+
+            const d1 = new Data();
+            const d2 = new Data();
+
+            assert.throws(() => {
+                d1.compare(d2);
+            }, Error, "ERROR");
 
         });
 
+        it("should return false for different data types", function(){
 
+            const d1 = new StringData("foo");
+            const d2 = new NumberData(1);
+            assert.equal(d1.compare(d2), false);
+
+        });
+
+        it("should return true for equal number data", function(){
+            const d1 = new NumberData(1);
+            const d2 = new NumberData(1);
+            assert.equal(d1.compare(d2), true);
+        });
+
+        it("should return true for equal string data", function(){
+            const d1 = new NumberData("foo");
+            const d2 = new NumberData("foo");
+            assert.equal(d1.compare(d2), true);
+        });
     });
 
 });
