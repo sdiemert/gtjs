@@ -35,7 +35,7 @@ describe("Graph", function () {
 
         it("should clone and not have references", function () {
 
-            const G = new Graph();
+            const G  = new Graph();
             const n0 = new Node("n0", "type", new NumberData(0));
             const n1 = new Node("n1", "type", new StringData("foo"));
             G.addNode(n0);
@@ -56,8 +56,8 @@ describe("Graph", function () {
 
             // now mutate values in H:
 
-            H.getNodeById("n1")._type = "somethingElse";
-            H.getEdgeById("e1")._type = "someEdgeType";
+            H.getNodeById("n1")._type      = "somethingElse";
+            H.getEdgeById("e1")._type      = "someEdgeType";
             H.getNodeById("n0").data.value = 5;
 
             // check that values are different (i.e. we are operating on different memory).
@@ -66,6 +66,85 @@ describe("Graph", function () {
             assert.notEqual(H.getNodeById("n1").type, G.getNodeById("n1").type);
             assert.notEqual(H.getEdgeById("e1").type, G.getEdgeById("e1").type);
             assert.notDeepEqual(H, G);
+
+        });
+
+    });
+
+    describe("#deleteEdge", function () {
+        /** @property G {Graph} **/
+        let G  = null;
+        /** @property n0 {Node} **/
+        let n0 = null;
+        /** @property n1 {Node} **/
+        let n1 = null;
+        /** @property e1 {Edge} **/
+        let e1 = null;
+
+        beforeEach(function () {
+            G  = new Graph();
+            n0 = new Node("n0", "type", new NumberData(0));
+            n1 = new Node("n1", "type", new StringData("foo"));
+            G.addNode(n0);
+            G.addNode(n1);
+            e1 = new Edge("e1", "type", "n0", "n1");
+            G.addEdge(e1);
+        });
+
+        afterEach(function () {
+            G  = null;
+            n0 = null;
+            n1 = null;
+            e1 = null;
+        });
+
+        it("should delete the edge", function () {
+            G.deleteEdge("e1");
+            assert.equal(G.isAdjacent(n0, n1), null);
+            assert.equal(Object.keys(G.edges).length, 0);
+        });
+
+    });
+
+    describe("#deleteNode", function () {
+        /** @property G {Graph} **/
+        let G  = null;
+        /** @property n0 {Node} **/
+        let n0 = null;
+        /** @property n1 {Node} **/
+        let n1 = null;
+        /** @property e1 {Edge} **/
+        let e1 = null;
+
+        beforeEach(function () {
+            G  = new Graph();
+            n0 = new Node("n0", "type", new NumberData(0));
+            n1 = new Node("n1", "type", new StringData("foo"));
+            G.addNode(n0);
+            G.addNode(n1);
+
+        });
+
+        afterEach(function () {
+            G  = null;
+            n0 = null;
+            n1 = null;
+            e1 = null;
+        });
+
+        it("should delete the node", function () {
+            G.deleteNode("n1");
+            assert.equal(Object.keys(G.nodes).length, 1);
+        });
+
+        it("should delete edges if they are adjacent", function(){
+            e1 = new Edge("e1", "type", "n0", "n1");
+            G.addEdge(e1);
+
+            G.deleteNode("n1");
+
+            assert.equal(Object.keys(G.nodes).length, 1);
+            assert.equal(Object.keys(G.edges).length, 0);
 
         });
 

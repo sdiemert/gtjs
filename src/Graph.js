@@ -125,6 +125,39 @@ class Graph{
         return G;
     }
 
+    /**
+     * Deletes the specified node, also deletes any dangling edges resulting from
+     * the nodes deletion.
+     *
+     * @param nId {string} the id of the node to delete.
+     */
+    deleteNode(nId){
+
+        // first delete any edges adjacent (src or tar) that are
+        // adjacent to the node.
+
+        for(let e in this.edges){
+
+            if(!this.edges.hasOwnProperty(e)) continue;
+            if(this.edges[e]._src === nId || this.edges[e]._tar === nId){
+                this.deleteEdge(this.edges[e].id);
+            }
+        }
+
+        // next delete the node itself
+        delete this._nodes[nId];
+
+    }
+
+    /**
+     * Deletes the specified edge.
+     *
+     * @param eId {string}
+     */
+    deleteEdge(eId){
+        delete this._edges[eId];
+    }
+
 }
 
 class Node{
