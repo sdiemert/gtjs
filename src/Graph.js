@@ -100,6 +100,14 @@ class Graph{
         return null;
     }
 
+    /**
+     * Makes a complete copy of this graph including all data values
+     * stored in the nodes.
+     *
+     * Calls the clone on child Node, Edge, and Data objects.
+     *
+     * @returns {Graph}
+     */
     clone(){
 
         const G = new Graph();
@@ -228,6 +236,13 @@ class Edge{
 class Data{
 
     /**
+     * @param v {object}
+     */
+    constructor(v){
+        this._value = v;
+    }
+
+    /**
      * Compares two data structures and determines if they are equivalent.
      *
      * Must be implemented by a sub-class.
@@ -250,6 +265,18 @@ class Data{
     clone(){
         throw new Error("Cannot call Data.clone() - it is abstract and must be implemented by a subclass");
     }
+
+    get value(){
+        return this._value;
+    }
+
+    /**
+     *
+     * @param v {object}
+     */
+    set value(v){
+        this._value = v;
+    }
 }
 
 class StringData extends Data{
@@ -258,13 +285,7 @@ class StringData extends Data{
      * @param s {string}
      */
     constructor(s){
-        super();
-
-        this._value = s;
-    }
-
-    get value(){
-        return this._value;
+        super(s);
     }
 
     /**
@@ -292,11 +313,8 @@ class NumberData extends Data{
      * @param n {number}
      */
     constructor(n){
-        super();
-        this._value = n;
+        super(n);
     }
-
-    get value() {return this._value;}
 
     compare(d){
         if(d instanceof NumberData){

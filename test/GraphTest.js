@@ -36,7 +36,7 @@ describe("Graph", function () {
         it("should clone and not have references", function () {
 
             const G = new Graph();
-            const n0 = new Node("n0", "type", new StringData("bar"));
+            const n0 = new Node("n0", "type", new NumberData(0));
             const n1 = new Node("n1", "type", new StringData("foo"));
             G.addNode(n0);
             G.addNode(n1);
@@ -58,9 +58,11 @@ describe("Graph", function () {
 
             H.getNodeById("n1")._type = "somethingElse";
             H.getEdgeById("e1")._type = "someEdgeType";
+            H.getNodeById("n0").data.value = 5;
 
             // check that values are different (i.e. we are operating on different memory).
 
+            assert.notEqual(H.getNodeById("n0").data.value, G.getNodeById("n0").data.value);
             assert.notEqual(H.getNodeById("n1").type, G.getNodeById("n1").type);
             assert.notEqual(H.getEdgeById("e1").type, G.getEdgeById("e1").type);
             assert.notDeepEqual(H, G);
