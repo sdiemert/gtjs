@@ -100,6 +100,23 @@ class Graph{
         return null;
     }
 
+    clone(){
+
+        const G = new Graph();
+
+        for(let n in this.nodes){
+            if(!this.nodes.hasOwnProperty(n)) continue;
+            G.addNode(this.nodes[n].clone())
+        }
+
+        for(let e in this.edges){
+            if(!this.nodes.hasOwnProperty(e)) continue;
+            G.addEdge(this.edges[e].clone())
+        }
+
+        return G;
+    }
+
 }
 
 class Node{
@@ -116,6 +133,15 @@ class Node{
         this._type = type;
         /** @property {Data} */
         this._data = data;
+    }
+
+    /**
+     * Makes a copy of this node;
+     * creates a copy of Data by calling Data.clone() method.
+     * @return {Node}
+     */
+    clone(){
+        return new Node(this.id, this.type, this.data.clone());
     }
 
     /**
@@ -154,6 +180,14 @@ class Edge{
         this._type = type;
         this._src = src;
         this._tar = tar;
+    }
+
+    /**
+     * Makes a copy of the edge and returns it.
+     * @return {Edge}
+     */
+    clone(){
+        return new Edge(this.id, this.type, this.src, this.tar);
     }
 
     /**
@@ -203,7 +237,18 @@ class Data{
      * @return {boolean} true if data structures are equivalent, false otherwise.
      */
     compare(d){
-        throw new Error("Cannot call method of an abstract class");
+        throw new Error("Cannot call Data.compare() - it is abstract and must be implemented by a subclass");
+    }
+
+    /**
+     * Makes a copy of the data object and returns it.
+     *
+     * Must be implemented by sub-classes.
+     *
+     * @return {Data}
+     */
+    clone(){
+        throw new Error("Cannot call Data.clone() - it is abstract and must be implemented by a subclass");
     }
 }
 
@@ -232,6 +277,13 @@ class StringData extends Data{
             return false;
         }
     }
+
+    /**
+     * @return {StringData}
+     */
+    clone(){
+        return new StringData(this.value);
+    }
 }
 
 class NumberData extends Data{
@@ -252,6 +304,13 @@ class NumberData extends Data{
         }else{
             return false;
         }
+    }
+
+    /**
+     * @returns {NumberData}
+     */
+    clone(){
+        return new NumberData(this.value);
     }
 }
 
