@@ -9,6 +9,8 @@ const iso = require("subgraph-isomorphism");
  *
  * @param G {Graph} the host/parent graph
  * @param H {Graph} the graph to search for match in parent, G.
+ *
+ * @return {Morphism[]} an array of possible morphisms.
  */
 function findMorphism(G, H){
 

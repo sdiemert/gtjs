@@ -1,6 +1,8 @@
 "use strict";
 
 const Graph = require("./Graph.js").Graph;
+const Node = require("./Graph.js").Node;
+const Matcher = require("./Matcher");
 
 class Rule {
 
@@ -29,16 +31,53 @@ class Rule {
 
     /**
      * @param G {Graph} the graph to apply this rule too.
+     *
+     * @return {Boolean}
+     *  true if the rule was applied (applied to G);
+     *  false if the rule was not applied (G unchanged).
      */
     apply(G) {
 
-        // call getLHS and find morphism for LHS in G.
+        // find morphism for LHS in G.
+        const lhsMorphisms = Matcher.findMorphism(G, this.LHS);
+
+        if(lhsMorphisms.length < 1){
+            // we could not find any morphism.
+            return false;
+        }
+
+        // pick the first Morphism found
+        // TODO: implement strategy for morphism choice (e.g. random).
+        const lhsMorphism = lhsMorphisms[0];
 
         // delete matched nodes (and dangling edges) and matched edges in G.
+        for(let e = 0; e < this._deleteEdges.length; e++){
+            const ruleEdgeId = this._deleteEdges[e];
+            const hostEdgeId = lhsMorphism.edgeMap[ruleEdgeId];
+            G.deleteEdge(hostEdgeId);
+        }
+
+        for(let n = 0; n < this._deleteNodes.length; n++){
+            const ruleNodeId = this._deleteNodes[n];
+            const hostNodeId = lhsMorphism.nodeMap[ruleNodeId] ;
+            G.deleteNode(hostNodeId);
+        }
 
         // apply exprs functions to remaining nodes.
+        // TODO: call exprs on each node...
 
         // add in new nodes and edges
+        for(let n = 0; n < this._addNodes.length; n++){
+            // TODO: we don't know what the ID should be in the host graph... it could already by taken...
+            // we could use some UID generator for all nodes; this may make it easier.
+            // i.e. Graph.addNode() does not take an ID itself, it returns the ID of the
+            // added node.
+            // Just need to make sure we have a UID generator that is low collision.
+            // Also need to have nodes rejected that have same id during add/modify.
+
+            //const newNode = this._graph.getNodeById(this._addNodes[n]).clone();
+            // G.addNode(newNode);
+        }
 
     }
 
