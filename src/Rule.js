@@ -1,8 +1,8 @@
 "use strict";
 
-const Graph  = require("./Graph.js").Graph;
+const Graph = require("./Graph.js").Graph;
 
-class Rule{
+class Rule {
 
     /**
      *
@@ -13,19 +13,24 @@ class Rule{
      * @param deleteEdges {string[]} an array of edge ids that should deleted.
      * @param exprs {object} an object indexed by node ids containing functions to call on each node's data field.
      */
-    constructor(G, addNodes, addEdges, deleteNodes, deleteEdges, exprs){
-        this._graph = G;
-        this._addNodes = addNodes;
-        this._addEdges = addEdges;
+    constructor(G, addNodes, addEdges, deleteNodes, deleteEdges, exprs) {
+        this._graph       = G;
+        this._addNodes    = addNodes;
+        this._addEdges    = addEdges;
         this._deleteNodes = deleteNodes;
         this._deleteEdges = deleteEdges;
-        this._exprs = exprs;
+        this._exprs       = exprs;
+
+        // compute this once so that it can be used
+        // multiple times later with no overhead.
+        this._LHS = this._computeLHS();
+        this._RHS = this._computeRHS();
     }
 
     /**
      * @param G {Graph} the graph to apply this rule too.
      */
-    apply(G){
+    apply(G) {
 
         // call getLHS and find morphism for LHS in G.
 
@@ -44,11 +49,43 @@ class Rule{
      *  - Nodes being deleted by the rule
      *  - Edges being deleted by the rule
      *
-     *  @return {Graph}
+     *  @return {Graph} a new Graph object representing the LHS.
      */
-    getLHS(){
+    _computeLHS() {
 
+        // copy the original graph object.
+        /** @property {Graph} H **/
+        const H = this._graph.clone();
+
+        // remove added edges
+        let toDelete = [];
+        for(let e = 0; e < H.edges.length; e++){
+            if(this._addEdges.includes(H.edges[e].id)){
+                toDelete.push(H.edges[e].id);
+            }
+        }
+
+        for(let e = 0; e < toDelete.length; e++){
+            H.deleteEdge(toDelete[e]);
+        }
+
+
+        toDelete = [];
+        // remove added nodes (also deletes adjacent edges).
+        for(let n = 0; n < H.nodes.length; n++){
+            if(this._addNodes.includes(H.nodes[n].id)){
+                toDelete.push(H.nodes[n].id)
+            }
+        }
+
+        for(let n = 0; n < toDelete.length; n++){
+            H.deleteNode(toDelete[n]);
+        }
+
+
+        return H;
     }
+
 
     /**
      * Returns a subgraph of this._graph which is the RHS of the rule, this contains:
@@ -59,8 +96,37 @@ class Rule{
      *
      *  @return {Graph}
      */
-    getRHS(){
+    _computeRHS() {
 
+        // copy the original graph object.
+        /** @property {Graph} H **/
+        const H = this._graph.clone();
+
+        // remove deleted edges
+        for(let e = 0; e < H.edges.length; e++){
+            if(this._deleteEdges.includes(H.edges[e].id)){
+                H.deleteEdge(H.edges[e].id);
+            }
+        }
+
+        // remove deleted nodes (also deletes adjacent edges).
+        for(let n = 0; n < H.nodes.length; n++){
+            if(this._deleteNodes.includes(H.nodes[n].id)){
+                H.deleteNode(H.nodes[n].id);
+            }
+        }
+
+        return H;
+    }
+
+    get LHS(){
+        return this._LHS;
+    }
+
+    get RHS(){
+        return this._RHS;
     }
 
 }
+
+module.exports = { Rule : Rule };

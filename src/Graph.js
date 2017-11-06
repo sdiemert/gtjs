@@ -112,14 +112,14 @@ class Graph{
 
         const G = new Graph();
 
-        for(let n in this.nodes){
-            if(!this.nodes.hasOwnProperty(n)) continue;
-            G.addNode(this.nodes[n].clone())
+        for(let n in this._nodes){
+            if(!this._nodes.hasOwnProperty(n)) continue;
+            G.addNode(this._nodes[n].clone())
         }
 
-        for(let e in this.edges){
-            if(!this.nodes.hasOwnProperty(e)) continue;
-            G.addEdge(this.edges[e].clone())
+        for(let e in this._edges){
+            if(!this._edges.hasOwnProperty(e)) continue;
+            G.addEdge(this._edges[e].clone())
         }
 
         return G;
@@ -136,11 +136,10 @@ class Graph{
         // first delete any edges adjacent (src or tar) that are
         // adjacent to the node.
 
-        for(let e in this.edges){
-
-            if(!this.edges.hasOwnProperty(e)) continue;
-            if(this.edges[e]._src === nId || this.edges[e]._tar === nId){
-                this.deleteEdge(this.edges[e].id);
+        for(let e in this._edges){
+            if(!this._edges.hasOwnProperty(e)) continue;
+            if(this._edges[e]._src === nId || this._edges[e]._tar === nId){
+                this.deleteEdge(e);
             }
         }
 
@@ -299,6 +298,9 @@ class Data{
         throw new Error("Cannot call Data.clone() - it is abstract and must be implemented by a subclass");
     }
 
+    /**
+     * @returns {object}
+     */
     get value(){
         return this._value;
     }
