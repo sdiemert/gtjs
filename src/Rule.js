@@ -119,6 +119,18 @@ class Rule {
         return H;
     }
 
+    /**
+     * Checks the semantics of the rule:
+     *  - Cannot delete an edge/node that is adjacent to an added node/edge.
+     *  - Cannot add a node/edge adjacent to a node/edge being deleted.
+     *  - TODO: look up formal semantics of GT rule application
+     *
+     * @return {boolean} true if all tests pass, false otherwise.
+     */
+    checkSemantics(){
+        return true;
+    }
+
     get LHS(){
         return this._LHS;
     }
@@ -126,6 +138,8 @@ class Rule {
     get RHS(){
         return this._RHS;
     }
+
+
 
 }
 
