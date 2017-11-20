@@ -20,11 +20,11 @@ describe("Graph", function () {
         it("should identify adjacent", function () {
 
             const G  = new Graph();
-            const n0 = new Node("n0", "type", new Data());
-            const n1 = new Node("n1", "type", new Data());
+            const n0 = new Node("type", new Data());
+            const n1 = new Node("type", new Data());
             G.addNode(n0);
             G.addNode(n1);
-            G.addEdge(new Edge("e1", "type", "n0", "n1"));
+            G.addEdge(new Edge("type", n0.id, n1.id));
 
             assert.notEqual(G.isAdjacent(n0, n1), null);
         });
@@ -36,36 +36,33 @@ describe("Graph", function () {
         it("should clone and not have references", function () {
 
             const G  = new Graph();
-            const n0 = new Node("n0", "type", new NumberData(0));
-            const n1 = new Node("n1", "type", new StringData("foo"));
+            const n0 = new Node("type", new NumberData(0));
+            const n1 = new Node("type", new StringData("foo"));
             G.addNode(n0);
             G.addNode(n1);
-            G.addEdge(new Edge("e1", "type", "n0", "n1"));
+            const e0 = new Edge("type", n0.id, n1.id);
+            G.addEdge(e0);
 
             const H = G.clone();
 
             assert.equal(H === null, false);
             assert.equal(H === undefined, false);
-            assert.deepEqual(H, G); // they are the same values.
 
-            assert.equal(H.getNodeById("n1").type, "type");
-            assert.equal(H.getNodeById("n0").type, "type");
-
-            assert.equal(H.getEdgeById("e1").type, "type");
-
+            assert.deepEqual(H.nodes[0].data, n0.data);
+            assert.deepEqual(H.nodes[1].data, n1.data);
+            assert.deepEqual(H.edges[0].data, e0.data);
 
             // now mutate values in H:
 
-            H.getNodeById("n1")._type      = "somethingElse";
-            H.getEdgeById("e1")._type      = "someEdgeType";
-            H.getNodeById("n0").data.value = 5;
+            H.nodes[0]._type      = "somethingElse";
+            H.edges[0]._type      = "someEdgeType";
+            H.nodes[0].data.value = 5;
 
             // check that values are different (i.e. we are operating on different memory).
 
-            assert.notEqual(H.getNodeById("n0").data.value, G.getNodeById("n0").data.value);
-            assert.notEqual(H.getNodeById("n1").type, G.getNodeById("n1").type);
-            assert.notEqual(H.getEdgeById("e1").type, G.getEdgeById("e1").type);
-            assert.notDeepEqual(H, G);
+            assert.notEqual(H.nodes[0].data.value, n0.data.value);
+            assert.notEqual(H.nodes[0].type, n0.type);
+            assert.notEqual(H.edges[0].type, e0.type);
 
         });
 
@@ -83,11 +80,11 @@ describe("Graph", function () {
 
         beforeEach(function () {
             G  = new Graph();
-            n0 = new Node("n0", "type", new NumberData(0));
-            n1 = new Node("n1", "type", new StringData("foo"));
+            n0 = new Node("type", new NumberData(0));
+            n1 = new Node("type", new StringData("foo"));
             G.addNode(n0);
             G.addNode(n1);
-            e1 = new Edge("e1", "type", "n0", "n1");
+            e1 = new Edge("type", n0.id, n1.id);
             G.addEdge(e1);
         });
 
@@ -99,7 +96,7 @@ describe("Graph", function () {
         });
 
         it("should delete the edge", function () {
-            G.deleteEdge("e1");
+            G.deleteEdge(e1.id);
             assert.equal(G.isAdjacent(n0, n1), null);
             assert.equal(Object.keys(G.edges).length, 0);
         });
@@ -118,8 +115,8 @@ describe("Graph", function () {
 
         beforeEach(function () {
             G  = new Graph();
-            n0 = new Node("n0", "type", new NumberData(0));
-            n1 = new Node("n1", "type", new StringData("foo"));
+            n0 = new Node("type", new NumberData(0));
+            n1 = new Node("type", new StringData("foo"));
             G.addNode(n0);
             G.addNode(n1);
 
@@ -133,15 +130,15 @@ describe("Graph", function () {
         });
 
         it("should delete the node", function () {
-            G.deleteNode("n1");
+            G.deleteNode(n1.id);
             assert.equal(Object.keys(G.nodes).length, 1);
         });
 
         it("should delete edges if they are adjacent", function(){
-            e1 = new Edge("e1", "type", "n0", "n1");
+            e1 = new Edge("type", n0.id, n1.id);
             G.addEdge(e1);
 
-            G.deleteNode("n1");
+            G.deleteNode(n1.id);
 
             assert.equal(Object.keys(G.nodes).length, 1);
             assert.equal(Object.keys(G.edges).length, 0);

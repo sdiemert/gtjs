@@ -8,14 +8,15 @@
   },
   "dependencies": {
     "clone": "^1.0.2",
-    "subgraph-isomorphism": "^1.0.0"
+    "subgraph-isomorphism": "^1.0.0",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "mocha": "^2.4.5"
   },
   "scripts": {
     "test": "mocha",
-    "coverage" : "istanbul cover _mocha -- -R spec test/*"
+    "coverage": "istanbul cover _mocha -- -R spec test/*"
   },
   "repository": {
     "type": "git",

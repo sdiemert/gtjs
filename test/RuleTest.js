@@ -24,18 +24,18 @@ describe("Rule", function () {
 
         G  = new Graph();
 
-        n1 = new Node("n1", "type", new NumberData(1));
-        n2 = new Node("n2", "type", new NumberData(2));
-        n3 = new Node("n3", "type", new NumberData(3));
-        n4 = new Node("n4", "type", new NumberData(4));
-        n5 = new Node("n5", "type", new NumberData(5));
+        n1 = new Node("type", new NumberData(1));
+        n2 = new Node("type", new NumberData(2));
+        n3 = new Node("type", new NumberData(3));
+        n4 = new Node("type", new NumberData(4));
+        n5 = new Node("type", new NumberData(5));
 
-        e1 = new Edge("e1", "type", "n1", "n2");
-        e2 = new Edge("e2", "type", "n2", "n3");
-        e3 = new Edge("e3", "type", "n3", "n1");
-        e4 = new Edge("e4", "type", "n3", "n4");
-        e5 = new Edge("e5", "type", "n4", "n5");
-        e6 = new Edge("e6", "type", "n1", "n5");
+        e1 = new Edge("type", n1.id, n2.id);
+        e2 = new Edge("type", n2.id, n3.id);
+        e3 = new Edge("type", n3.id, n1.id);
+        e4 = new Edge("type", n3.id, n4.id);
+        e5 = new Edge("type", n4.id, n5.id);
+        e6 = new Edge("type", n1.id, n5.id);
 
         G.addNode(n1);
         G.addNode(n2);
@@ -50,7 +50,7 @@ describe("Rule", function () {
         G.addEdge(e5);
         G.addEdge(e6);
 
-        R = new Rule(G, ["n3"], ["e2", "e3"], ["n5"], ["e6"], {});
+        R = new Rule(G, [n3.id], [e2.id, e3.id], [n5.id], [e6.id], {});
 
     });
 

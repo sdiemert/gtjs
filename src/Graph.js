@@ -9,6 +9,9 @@
  * - Data (abstract)
  */
 
+// this package is used to generate random node and edge id's
+const uuid = require("uuid/v4");
+
 class Graph{
 
     constructor(){
@@ -162,13 +165,12 @@ class Graph{
 class Node{
 
     /**
-     * @param id {string}
      * @param type {string}
      * @param data {Data}
      */
-    constructor(id, type, data){
+    constructor(type, data){
         /** @property {string} */
-        this._id = id;
+        this._id = 'n-' + uuid();
         /** @property {string} */
         this._type = type;
         /** @property {Data} */
@@ -178,10 +180,16 @@ class Node{
     /**
      * Makes a copy of this node;
      * creates a copy of Data by calling Data.clone() method.
+     *
+     * This clone operation does not generate a new node id.
+     * i.e., it copies the existing node's id.
+     *
      * @return {Node}
      */
     clone(){
-        return new Node(this.id, this.type, this.data.clone());
+        const n = new Node(this.type, this.data.clone());
+        n._id = this._id;
+        return n;
     }
 
     /**
@@ -210,13 +218,12 @@ class Node{
 class Edge{
 
     /**
-     * @param id {string}
      * @param type {string} - this field is currently unused.
      * @param src {string}
      * @param tar {string}
      */
-    constructor(id, type, src, tar){
-        this._id = id;
+    constructor(type, src, tar){
+        this._id = 'e-' + uuid();
         this._type = type;
         this._src = src;
         this._tar = tar;
@@ -224,10 +231,16 @@ class Edge{
 
     /**
      * Makes a copy of the edge and returns it.
+     *
+     * This clone operates also copies the id of the
+     * edge, i.e., a new edge id is not generated.
+     *
      * @return {Edge}
      */
     clone(){
-        return new Edge(this.id, this.type, this.src, this.tar);
+        const e = new Edge(this.type, this.src, this.tar);
+        e._id = this._id;
+        return e;
     }
 
     /**
