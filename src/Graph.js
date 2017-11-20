@@ -21,16 +21,40 @@ class Graph{
 
     /**
      * @param n {Node}
+     * @return {boolean} true if added, false otherwise.
      */
     addNode(n){
+
+        // check to ensure that the node id is not
+        // already in use; reject if it is.
+        for(let i = 0; i < this.nodes.length; i++){
+            if(n.id === this.nodes[i].id){
+                return false;
+            }
+        }
+
         this._nodes[n.id] = n;
+
+        return true;
     }
 
     /**
      * @param e {Edge}
+     * @return {boolean} true if added, false otherwise.
      */
     addEdge(e){
+
+        // check to make sure the id is not already in use
+
+        for(let i = 0; i < this.edges.length; i++){
+            if(e.id === this.edges[i].id){
+                return false;
+            }
+        }
+
         this._edges[e.id] = e;
+
+        return true;
     }
 
     /**

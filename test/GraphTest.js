@@ -147,6 +147,71 @@ describe("Graph", function () {
 
     });
 
+    describe("#addNode", function(){
+
+        it("should return true on successful add", function(){
+            const  G = new Graph();
+            const n = new Node("type", new NumberData(0));
+            const result = G.addNode(n);
+            assert.notEqual(n, null);
+            assert.equal(result, true);
+        });
+
+        it('should return false if node id already exists', function(){
+            const  G = new Graph();
+            const n0 = new Node("type", new NumberData(0));
+            const n1 = new Node("type", new NumberData(1));
+
+            // set id so that they are the same.
+            n1._id = n0.id;
+
+            const r0 = G.addNode(n0);
+            const r1 = G.addNode(n1);
+            assert.notEqual(n0, null);
+            assert.notEqual(n1, null);
+            assert.equal(r0, true);
+            assert.equal(r1, false);
+        });
+
+    });
+
+    describe("#addEdge", function(){
+
+        it("should return true on successful add", function(){
+            const G = new Graph();
+            const n0 = new Node("type", new NumberData(0));
+            const n1 = new Node("type", new NumberData(1));
+            const e0 = new Edge("type", n0.id, n1.id);
+            G.addNode(n0);
+            G.addNode(n1);
+            const r0 = G.addEdge(e0);
+            assert.notEqual(e0, null);
+            assert.equal(r0, true);
+        });
+
+        it("should return false if edge id already exists", function(){
+            const G = new Graph();
+            const n0 = new Node("type", new NumberData(0));
+            const n1 = new Node("type", new NumberData(1));
+            const n2 = new Node("type", new NumberData(2));
+            const e0 = new Edge("type", n0.id, n1.id);
+            const e1 = new Edge("type", n0.id, n2.id);
+
+            e1._id  = e0.id;
+
+            G.addNode(n0);
+            G.addNode(n1);
+            G.addNode(n2);
+            const r0 = G.addEdge(e0);
+            const r1 = G.addEdge(e1);
+            assert.notEqual(e0, null);
+            assert.notEqual(e1, null);
+            assert.equal(r0, true);
+            assert.equal(r1, false);
+        });
+
+    });
+
 });
 
 describe("Data", function () {
