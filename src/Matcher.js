@@ -9,15 +9,18 @@ const iso = require("subgraph-isomorphism");
  *
  * @param G {Graph} the host/parent graph
  * @param H {Graph} the graph to search for match in parent, G.
+ * @param numMatches {number} a natural number of matches to find.
  *
  * @return {Morphism[]} an array of possible morphisms.
  */
-function findMorphism(G, H){
+function findMorphism(G, H, numMatches){
+
+    numMatches = numMatches || null;
 
     const adjG = asAdjMatrix(G);
     const adjH = asAdjMatrix(H);
 
-    const result = iso.getIsomorphicSubgraphs(adjG.matrix, adjH.matrix, null,
+    const result = iso.getIsomorphicSubgraphs(adjG.matrix, adjH.matrix, numMatches,
         function(P, Q, p, q){ // P == H, Q == G
 
             const gNode = G.getNodeById(adjG.indexToId[q]);

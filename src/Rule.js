@@ -2,13 +2,14 @@
 
 const Graph = require("./Graph.js").Graph;
 const Node = require("./Graph.js").Node;
+const Edge = require("./Graph.js").Edge;
 const Matcher = require("./Matcher");
 
 class Rule {
 
     /**
      *
-     * @param G {Graph}
+     * @param G {Graph} the graph describing the rule.
      * @param addNodes {string[]} an array of node ids in G that should be added.
      * @param addEdges {string[]} an array of edge ids in G that should be added.
      * @param deleteNodes {string[]} an array of node ids that should be deleted.
@@ -39,7 +40,7 @@ class Rule {
     apply(G) {
 
         // find morphism for LHS in G.
-        const lhsMorphisms = Matcher.findMorphism(G, this.LHS);
+        const lhsMorphisms = Matcher.findMorphism(G, this.LHS, 1);
 
         if(lhsMorphisms.length < 1){
             // we could not find any morphism.
@@ -68,17 +69,27 @@ class Rule {
 
         // add in new nodes and edges
         for(let n = 0; n < this._addNodes.length; n++){
-            // TODO: we don't know what the ID should be in the host graph... it could already by taken...
-            // we could use some UID generator for all nodes; this may make it easier.
-            // i.e. Graph.addNode() does not take an ID itself, it returns the ID of the
-            // added node.
-            // Just need to make sure we have a UID generator that is low collision.
-            // Also need to have nodes rejected that have same id during add/modify.
-
-            //const newNode = this._graph.getNodeById(this._addNodes[n]).clone();
-            // G.addNode(newNode);
+            const newNode = this._graph.getNodeById(this._addNodes[n]).clone();
+            lhsMorphism.nodeMap[this._addNodes[n]] = newNode.id;
+            G.addNode(newNode);
         }
 
+        for(let e = 0; e < this._addEdges.length; e++){
+            const newEdge = this._graph.getEdgeById(this._addEdges[e]).clone();
+
+            const ruleSrc  = this._graph.getEdgeById(this._addEdges[e]).src;
+            const ruleTar  = this._graph.getEdgeById(this._addEdges[e]).tar;
+
+            const hostSrc = lhsMorphism.nodeMap[ruleSrc];
+            const hostTar = lhsMorphism.nodeMap[ruleTar];
+
+            newEdge.src = hostSrc;
+            newEdge.tar = hostTar;
+
+            G.addEdge(newEdge);
+        }
+
+        return true;
     }
 
     /**

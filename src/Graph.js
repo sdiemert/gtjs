@@ -297,6 +297,20 @@ class Edge{
     get tar() {
         return this._tar;
     }
+
+    /**
+     * @param s {string}
+     */
+    set src(s){
+        this._src = s;
+    }
+
+    /**
+     * @param t {string}
+     */
+    set tar(t){
+        this._tar = t;
+    }
 }
 
 /**

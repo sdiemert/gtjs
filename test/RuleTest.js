@@ -22,7 +22,7 @@ describe("Rule", function () {
 
     beforeEach(function () {
 
-        G  = new Graph();
+        G = new Graph();
 
         n1 = new Node("type", new NumberData(1));
         n2 = new Node("type", new NumberData(2));
@@ -67,7 +67,7 @@ describe("Rule", function () {
             assert.equal(lhs.isAdjacent(n2, n3), null);
         });
 
-        it("should delete edges on nodes adjacent to add nodes", ()=>{
+        it("should delete edges on nodes adjacent to add nodes", () => {
 
             const lhs = R._computeLHS();
 
@@ -80,9 +80,9 @@ describe("Rule", function () {
 
     });
 
-    describe("#_computeRHS()", function(){
+    describe("#_computeRHS()", function () {
 
-        it('should compute the correct RHS', function(){
+        it('should compute the correct RHS', function () {
 
             const rhs = R._computeRHS();
 
@@ -90,6 +90,159 @@ describe("Rule", function () {
             assert.equal(rhs.nodes.length, 4);
 
         });
+
+    });
+
+    describe("#apply()", function () {
+
+        it("should work on a simple graph", function () {
+
+            const G  = new Graph();
+            const n1 = new Node("node 1", new NumberData(1));
+            const n2 = new Node("node 2", new NumberData(2));
+            const e1 = new Edge("edge 1", n1.id, n2.id);
+            G.addNode(n1);
+            G.addNode(n2);
+            G.addEdge(e1);
+
+            const ruleGraph = new Graph();
+            const nr1       = new Node("node 1", new NumberData(1));
+            const nr2       = new Node("node 2", new NumberData(2));
+            const nr3       = new Node("node 3", new NumberData(3));
+            const er1       = new Edge("edge 1", nr1.id, nr2.id);
+            const er2       = new Edge("edge 2", nr2.id, nr3.id);
+            const er3       = new Edge("edge 3", nr3.id, nr1.id);
+            ruleGraph.addNode(nr1);
+            ruleGraph.addNode(nr2);
+            ruleGraph.addNode(nr3);
+            ruleGraph.addEdge(er1);
+            ruleGraph.addEdge(er2);
+            ruleGraph.addEdge(er3);
+
+            const R = new Rule(ruleGraph, [nr3.id], [er2.id, er3.id], [], [], {});
+
+            const result = R.apply(G);
+
+            assert.equal(result, true);
+
+            assert.equal(G.nodes.length, 3);
+            assert.equal(G.edges.length, 3);
+            assert.notEqual(G.edges[0].src, undefined);
+            assert.notEqual(G.edges[0].tar, undefined);
+            assert.notEqual(G.edges[1].src, undefined);
+            assert.notEqual(G.edges[1].tar, undefined);
+            assert.notEqual(G.edges[2].tar, undefined);
+            assert.notEqual(G.edges[2].src, undefined);
+
+            assert.equal(G.edges[0].type, "edge 1");
+            assert.equal(G.edges[1].type, "edge 2");
+            assert.equal(G.edges[2].type, "edge 3");
+
+            //should not change existing nodes.
+            assert.deepEqual(G.nodes[0], n1);
+            assert.deepEqual(G.nodes[1], n2);
+
+            assert.deepEqual(G.nodes[2].data, nr3.data);
+        });
+
+        it("should not apply to a graph without a match", function () {
+
+            const G  = new Graph();
+            const n1 = new Node("not node 1", new NumberData(1));
+            const n2 = new Node("node 2", new NumberData(2));
+            const e1 = new Edge("edge 1", n1.id, n2.id);
+            G.addNode(n1);
+            G.addNode(n2);
+            G.addEdge(e1);
+
+            const ruleGraph = new Graph();
+            const nr1       = new Node("node 1", new NumberData(1));
+            const nr2       = new Node("node 2", new NumberData(2));
+            const nr3       = new Node("node 3", new NumberData(3));
+            const er1       = new Edge("edge 1", nr1.id, nr2.id);
+            const er2       = new Edge("edge 2", nr2.id, nr3.id);
+            const er3       = new Edge("edge 3", nr3.id, nr1.id);
+            ruleGraph.addNode(nr1);
+            ruleGraph.addNode(nr2);
+            ruleGraph.addNode(nr3);
+            ruleGraph.addEdge(er1);
+            ruleGraph.addEdge(er2);
+            ruleGraph.addEdge(er3);
+
+            const R = new Rule(ruleGraph, [nr3.id], [er2.id, er3.id], [], [], {});
+
+            const result = R.apply(G);
+
+            assert.equal(result, false);
+
+            assert.equal(G.nodes.length, 2);
+            assert.equal(G.edges.length, 1);
+            assert.deepEqual(G.nodes[0], n1);
+            assert.deepEqual(G.nodes[1], n2);
+        });
+
+        it("should be able to delete nodes", function () {
+
+            const G  = new Graph();
+            const n1 = new Node("node 1", new NumberData(1));
+            const n2 = new Node("node 2", new NumberData(2));
+            const n3 = new Node("node 3", new NumberData(3));
+            const e1 = new Edge("edge 1", n1.id, n2.id);
+            G.addNode(n1);
+            G.addNode(n2);
+            G.addNode(n3);
+            G.addEdge(e1);
+
+            const ruleGraph = new Graph();
+            const nr1       = new Node("node 1", new NumberData(1));
+            const nr2       = new Node("node 2", new NumberData(2));
+            const nr3       = new Node("node 3", new NumberData(3));
+            const er1       = new Edge("edge 1", nr1.id, nr2.id);
+
+            ruleGraph.addNode(nr1);
+            ruleGraph.addNode(nr2);
+            ruleGraph.addNode(nr3);
+            ruleGraph.addEdge(er1);
+
+            const R = new Rule(ruleGraph, [], [], [nr3.id], [], {});
+
+            const result = R.apply(G);
+
+            assert.equal(result, true);
+
+            assert.equal(G.nodes.length, 2);
+            assert.equal(G.edges.length, 1);
+        });
+
+        it("should be able to delete edges", function () {
+
+            const G  = new Graph();
+            const n1 = new Node("node 1", new NumberData(1));
+            const n2 = new Node("node 2", new NumberData(2));
+            const e1 = new Edge("edge 1", n1.id, n2.id);
+            G.addNode(n1);
+            G.addNode(n2);
+            G.addEdge(e1);
+
+            const ruleGraph = new Graph();
+            const nr1       = new Node("node 1", new NumberData(1));
+            const nr2       = new Node("node 2", new NumberData(2));
+            const er1       = new Edge("edge 1", nr1.id, nr2.id);
+
+            ruleGraph.addNode(nr1);
+            ruleGraph.addNode(nr2);
+            ruleGraph.addEdge(er1);
+
+            const R = new Rule(ruleGraph, [], [], [], [er1.id], {});
+
+            const result = R.apply(G);
+
+            assert.equal(result, true);
+
+            assert.equal(G.nodes.length, 2);
+            assert.equal(G.edges.length, 0);
+        });
+
 
     });
 
