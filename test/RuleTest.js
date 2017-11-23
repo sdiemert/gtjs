@@ -244,6 +244,164 @@ describe("Rule", function () {
         });
 
 
+        it("should not apply if a NAC is matched", function () {
+
+            const G  = new Graph();
+            const n1 = new Node("A", new NumberData(1));
+            const n2 = new Node("B", new NumberData(2));
+            const n3 = new Node("C", new NumberData(3));
+            const e1 = new Edge("edge", n1.id, n2.id);
+            const e2 = new Edge("edge", n2.id, n3.id);
+
+            G.addNode(n1);
+            G.addNode(n2);
+            G.addNode(n3);
+            G.addEdge(e1);
+            G.addEdge(e2);
+
+            const ruleGraph = new Graph();
+            const nr1       = new Node("A", new NumberData(1));
+            const nr2       = new Node("B", new NumberData(2));
+            const nr3       = new Node("C", new NumberData(3));
+            const er1       = new Edge("edge", nr1.id, nr2.id);
+            const er2       = new Edge("edge", nr2.id, nr3.id);
+            ruleGraph.addNode(nr1);
+            ruleGraph.addNode(nr2);
+            ruleGraph.addNode(nr3);
+            ruleGraph.addEdge(er1);
+            ruleGraph.addEdge(er2);
+
+            const R = new Rule(ruleGraph, [], [], [], [], {}, [nr3.id], [er2.id]);
+
+            const result = R.apply(G);
+
+            assert.equal(result, false);
+
+        });
+
+        it("should not apply if a NAC edge is matched", function () {
+
+            const G  = new Graph();
+            const n1 = new Node("A", new NumberData(1));
+            const n2 = new Node("B", new NumberData(2));
+            const n3 = new Node("C", new NumberData(3));
+            const e1 = new Edge("edge", n1.id, n2.id);
+            const e2 = new Edge("edge", n2.id, n3.id);
+
+            G.addNode(n1);
+            G.addNode(n2);
+            G.addNode(n3);
+            G.addEdge(e1);
+            G.addEdge(e2);
+
+            const ruleGraph = new Graph();
+            const nr1       = new Node("A", new NumberData(1));
+            const nr2       = new Node("B", new NumberData(2));
+            const nr3       = new Node("C", new NumberData(3));
+            const er1       = new Edge("edge", nr1.id, nr2.id);
+            const er2       = new Edge("edge", nr2.id, nr3.id);
+            ruleGraph.addNode(nr1);
+            ruleGraph.addNode(nr2);
+            ruleGraph.addNode(nr3);
+            ruleGraph.addEdge(er1);
+            ruleGraph.addEdge(er2);
+
+            const R = new Rule(ruleGraph, [], [], [], [], {}, [], [er2.id]);
+
+            const result = R.apply(G);
+
+            assert.equal(result, false);
+
+        });
+        it("should apply if a NAC is not matched", function () {
+
+            const G  = new Graph();
+            const n1 = new Node("A", new NumberData(1));
+            const n2 = new Node("B", new NumberData(2));
+            const n3 = new Node("C", new NumberData(3));
+            const e1 = new Edge("edge", n1.id, n2.id);
+            const e2 = new Edge("edge", n2.id, n3.id);
+
+            G.addNode(n1);
+            G.addNode(n2);
+            G.addNode(n3);
+            G.addEdge(e1);
+            G.addEdge(e2);
+
+            const ruleGraph = new Graph();
+            const nr1       = new Node("A", new NumberData(1));
+            const nr2       = new Node("B", new NumberData(2));
+            const nr3       = new Node("C", new NumberData(3));
+            const nr4       = new Node("D", new NumberData(4));
+            const er1       = new Edge("edge", nr1.id, nr2.id);
+            const er2       = new Edge("edge different", nr2.id, nr3.id);
+
+            ruleGraph.addNode(nr1);
+            ruleGraph.addNode(nr2);
+            ruleGraph.addNode(nr3);
+            ruleGraph.addNode(nr4);
+            ruleGraph.addEdge(er1);
+            ruleGraph.addEdge(er2);
+
+            const R = new Rule(ruleGraph, [nr4.id], [], [], [], {}, [], [er2.id]);
+
+            const result = R.apply(G);
+
+            assert.equal(result, true);
+            assert.equal(G.nodes.length, 4);
+            assert.equal(G.edges.length, 2);
+
+        });
+
+        it("should apply in a graph with both a NAC match and non-NAC match", function () {
+
+            const G  = new Graph();
+            const n1 = new Node("A", new NumberData(1));
+            const n2 = new Node("B", new NumberData(2));
+            const n3 = new Node("C", new NumberData(3));
+            const n4 = new Node("A", new NumberData(1));
+            const n5 = new Node("B", new NumberData(2));
+            const e1 = new Edge("edge", n1.id, n2.id);
+            const e2 = new Edge("edge", n2.id, n3.id);
+            const e3 = new Edge("edge", n4.id, n2.id);
+            const e4 = new Edge("edge", n4.id, n5.id);
+
+            G.addNode(n1);
+            G.addNode(n2);
+            G.addNode(n3);
+            G.addNode(n4);
+            G.addNode(n5);
+            G.addEdge(e1);
+            G.addEdge(e2);
+            G.addEdge(e3);
+            G.addEdge(e4);
+
+            const ruleGraph = new Graph();
+            const nr1       = new Node("A", new NumberData(1));
+            const nr2       = new Node("B", new NumberData(2));
+            const nr3       = new Node("C", new NumberData(3));
+            const nr4       = new Node("D", new NumberData(4));
+            const er1       = new Edge("edge", nr1.id, nr2.id);
+            const er2       = new Edge("edge", nr2.id, nr3.id);
+            const er3       = new Edge("edge", nr1.id, nr4.id);
+            ruleGraph.addNode(nr1);
+            ruleGraph.addNode(nr2);
+            ruleGraph.addNode(nr3);
+            ruleGraph.addNode(nr4);
+            ruleGraph.addEdge(er1);
+            ruleGraph.addEdge(er2);
+            ruleGraph.addEdge(er3);
+
+            const R = new Rule(ruleGraph, [nr4.id], [er3.id], [], [], {}, [nr3.id], [er2.id]);
+
+            const result = R.apply(G);
+
+            assert.equal(result, true);
+            assert.equal(G.nodes.length, 6);
+            assert.equal(G.edges.length, 5);
+
+        });
+
     });
 
 });
