@@ -298,7 +298,107 @@ class Rule {
      * @return {boolean} true if all tests pass, false otherwise.
      */
     checkSemantics() {
+
+        this._checkValidIds();
+        this._checkNodeTypesDistinct();
+
         return true;
+    }
+
+    /**
+     * Checks to ensure that all of the node and edge ids provided
+     * in the add, delete, and NAC arrays are correctly formatted.
+     *
+     * @throws {RuleInvalidException} if one of the node or edge ids is invalid.
+     * @private
+     */
+    _checkValidIds(){
+
+        const nodeRegex = new RegExp('^n-.*$');
+        const edgeRegex = new RegExp('^e-.*$');
+
+        for(let i = 0; i < this._addNodes.length; i++){
+            if(typeof this._addNodes[i] !== "string")
+                throw new RuleInvalidException("Invalid node id in nodes to add: " + this._addNodes[i]);
+
+            if(!this._addNodes[i].match(nodeRegex))
+                throw new RuleInvalidException("Invalid node id in nodes to add: " + this._addNodes[i]);
+        }
+
+        for(let i = 0; i < this._deleteNodes.length; i++) {
+            if(typeof this._deleteNodes[i] !== "string")
+                throw new RuleInvalidException("Invalid node id in nodes to delete: " + this._deleteNodes[i]);
+
+            if (!this._deleteNodes[i].match(nodeRegex))
+                throw new RuleInvalidException("Invalid node id in nodes to delete: " + this._deleteNodes[i]);
+        }
+
+        for(let i = 0; i < this._nacNodes.length; i++) {
+            if(typeof this._nacNodes[i] !== "string")
+                throw new RuleInvalidException("Invalid node id in nodes for NAC: " + this._nacNodes[i]);
+
+            if (!this._nacNodes[i].match(nodeRegex))
+                throw new RuleInvalidException("Invalid node id in nodes for NAC: " + this._nacNodes[i]);
+        }
+
+        for(let i = 0; i < this._addEdges.length; i++) {
+            if(typeof this._addEdges[i] !== "string")
+                throw new RuleInvalidException("Invalid edge id in edges for edge: " + this._addEdges[i]);
+
+            if (!this._addEdges[i].match(edgeRegex))
+                throw new RuleInvalidException("Invalid edge id in edges for add: " + this._addEdges[i]);
+        }
+
+        for(let i = 0; i < this._deleteEdges.length; i++) {
+            if(typeof this._deleteEdges[i] !== "string")
+                throw new RuleInvalidException("Invalid edge id in edges for delete: " + this._deleteEdges[i]);
+
+            if (!this._deleteEdges[i].match(edgeRegex))
+                throw new RuleInvalidException("Invalid node id in edges for delete: " + this._deleteEdges[i]);
+        }
+
+        for(let i = 0; i < this._nacEdges.length; i++) {
+            if(typeof this._nacEdges[i] !== "string")
+                throw new RuleInvalidException("Invalid edge id in edges for NAC: " + this._nacEdges[i]);
+
+            if (!this._nacEdges[i].match(edgeRegex))
+                throw new RuleInvalidException("Invalid node id in edges for NAC: " + this._nacEdges[i]);
+        }
+    }
+
+    _checkNodeTypesDistinct(){
+
+        // 1) check that add nodes and delete nodes do not overlap
+        for(let i = 0; i < this._addNodes.length; i++){
+            if(this._deleteNodes.includes(this._addNodes[i])){
+                throw new RuleInvalidException("Node " + this._addNodes[i] + " cannot be both an add and delete node.");
+            }
+        }
+
+        // 2) check that add edges and delete edges do not overlap
+        for(let i = 0; i < this._addEdges.length; i++){
+            if(this._deleteEdges.includes(this._addEdges[i])){
+                throw new RuleInvalidException("Edge " + this._addEdges[i] + " cannot be both an add and delete edge.");
+            }
+        }
+
+        // 3) check that delete nodes and NAC nodes do not overlap
+        for(let i = 0; i < this._nacNodes.length; i++){
+            if(this._deleteNodes.includes(this._nacNodes[i])){
+                throw new RuleInvalidException("Node " + this._nacNodes[i] + " cannot be both an NAC and delete node.");
+            }
+        }
+
+        // 5) check that delete nodes and NAC nodes do not overlap
+        for(let i = 0; i < this._nacEdges.length; i++) {
+            if (this._deleteEdges.includes(this._nacEdges[i])) {
+                throw new RuleInvalidException("Node " + this._nacEdges[i] + " cannot be both an NAC and delete edge.");
+            }
+        }
+
+        // add nodes/edges can overlap with NAC nodes/edges because you can
+        // check for a node/edge not existing and then add it.
+
     }
 
     get LHS() {
@@ -312,4 +412,10 @@ class Rule {
 
 }
 
-module.exports = {Rule: Rule};
+class RuleInvalidException extends Error{
+    constructor(message){
+        super(message);
+    }
+}
+
+module.exports = {Rule: Rule, RuleInvalidException : RuleInvalidException};

@@ -5,12 +5,13 @@
  * Unit tests for: FILE TO TEST.
  */
 
-const assert     = require('assert');
-const Rule       = require('../src/Rule.js').Rule;
-const Graph      = require("../src/Graph.js").Graph;
-const Node       = require("../src/Graph.js").Node;
-const Edge       = require("../src/Graph.js").Edge;
-const NumberData = require("../src/Graph.js").NumberData;
+const assert               = require('assert');
+const Rule                 = require('../src/Rule.js').Rule;
+const RuleInvalidException = require('../src/Rule.js').RuleInvalidException;
+const Graph                = require("../src/Graph.js").Graph;
+const Node                 = require("../src/Graph.js").Node;
+const Edge                 = require("../src/Graph.js").Edge;
+const NumberData           = require("../src/Graph.js").NumberData;
 
 
 describe("Rule", function () {
@@ -50,7 +51,7 @@ describe("Rule", function () {
         G.addEdge(e5);
         G.addEdge(e6);
 
-        R = new Rule(G, [n3.id], [e2.id, e3.id], [n5.id], [e6.id], {});
+        R = new Rule(G, [n3.id], [e2.id, e3.id], [n5.id], [e6.id], {}, [], []);
 
     });
 
@@ -400,6 +401,194 @@ describe("Rule", function () {
             assert.equal(G.nodes.length, 6);
             assert.equal(G.edges.length, 5);
 
+        });
+
+    });
+
+    describe("#_checkValidIds()", function () {
+
+        let ruleGraph = null;
+        let nr1       = null, nr2 = null, nr3 = null, nr4 = null;
+        let er1       = null, er2 = null, er3 = null;
+        let rule      = null;
+
+        beforeEach(function () {
+            ruleGraph = new Graph();
+
+            nr1 = new Node("type", new NumberData(1));
+            nr2 = new Node("type", new NumberData(1));
+            nr3 = new Node("type", new NumberData(1));
+            nr4 = new Node("type", new NumberData(1));
+            er1 = new Edge("type", nr1.id, nr2.id);
+            er2 = new Edge("type", nr2.id, nr3.id);
+            er3 = new Edge("type", nr1.id, nr4.id);
+
+        });
+
+        afterEach(function () {
+            ruleGraph = null;
+            nr1       = null;
+            nr2       = null;
+            nr3       = null;
+            nr4       = null;
+            er1       = null;
+            er2       = null;
+            er3       = null;
+            rule      = null;
+        });
+
+        it("should detect an invalid string add node id", function () {
+            rule = new Rule(G, [nr1.id, "invalid-node-id"], [], [], [], {}, [], []);
+            assert.throws(() => {
+                rule._checkValidIds();
+            }, RuleInvalidException);
+        });
+
+        it("should detect an invalid string add node id", function () {
+            // pass not a string.
+            rule = new Rule(G, [nr1], [], [], [], {}, [], []);
+            assert.throws(() => {
+                rule._checkValidIds();
+            }, RuleInvalidException);
+        });
+
+        it("should detect an invalid string delete node id", function () {
+            rule = new Rule(G, [], [], [nr1.id, "invalid-node-id"], [], {}, [], []);
+            assert.throws(() => {
+                rule._checkValidIds();
+            }, RuleInvalidException);
+        });
+
+        it("should detect an invalid string delete node id", function () {
+            // pass not a string.
+            rule = new Rule(G, [], [], [nr1], [], {}, [], []);
+            assert.throws(() => {
+                rule._checkValidIds();
+            }, RuleInvalidException);
+        });
+         it("should detect an invalid string nac node id", function () {
+            rule = new Rule(G, [], [], [], [], {}, [nr1.id, "invalid-nac-id"], []);
+            assert.throws(() => {
+                rule._checkValidIds();
+            }, RuleInvalidException);
+        });
+
+        it("should detect an invalid string nac node id", function () {
+            // pass not a string.
+            rule = new Rule(G, [], [], [], [], {}, [nr1], []);
+            assert.throws(() => {
+                rule._checkValidIds();
+            }, RuleInvalidException);
+        });
+
+        it("should detect an invalid string add edge id", function () {
+            rule = new Rule(G, [], [er1.id, "invalid-edge-id"], [], [], {}, [], []);
+            assert.throws(() => {
+                rule._checkValidIds();
+            }, RuleInvalidException);
+        });
+
+        it("should detect an invalid string add edge id", function () {
+            // pass not a string.
+            rule = new Rule(G, [], [er1], [], [], {}, [], []);
+            assert.throws(() => {
+                rule._checkValidIds();
+            }, RuleInvalidException);
+        });
+
+        it("should detect an invalid string delete edge id", function () {
+            rule = new Rule(G, [], [], [], [er1.id, "invalid-edge-id"], {}, [], []);
+            assert.throws(() => {
+                rule._checkValidIds();
+            }, RuleInvalidException);
+        });
+
+        it("should detect an invalid string delete edge id", function () {
+            // pass not a string.
+            rule = new Rule(G, [], [], [], [er1], {}, [], []);
+            assert.throws(() => {
+                rule._checkValidIds();
+            }, RuleInvalidException);
+        });
+         it("should detect an invalid string nac node id", function () {
+            rule = new Rule(G, [], [], [], [], {}, [], [er1.id, "invalid-nac-id"]);
+            assert.throws(() => {
+                rule._checkValidIds();
+            }, RuleInvalidException);
+        });
+
+        it("should detect an invalid string nac node id", function () {
+            // pass not a string.
+            rule = new Rule(G, [], [], [], [], {}, [], [er1]);
+            assert.throws(() => {
+                rule._checkValidIds();
+            }, RuleInvalidException);
+        });
+
+        it("should not throw error for a set of valid nodes", function(){
+            rule = new Rule(G, [nr1.id], [er1.id], [nr2.id], [er3.id], {}, [nr3.id], [er2.id]);
+            assert.doesNotThrow(()=>{
+                rule._checkValidIds();
+            }, RuleInvalidException);
+        });
+
+    });
+
+    describe("#_checkNodeTypesDistinct", function(){
+
+        let ruleGraph = null;
+        let nr1       = null, nr2 = null, nr3 = null, nr4 = null;
+        let er1       = null, er2 = null, er3 = null;
+        let rule      = null;
+
+        beforeEach(function () {
+            ruleGraph = new Graph();
+
+            nr1 = new Node("type", new NumberData(1));
+            nr2 = new Node("type", new NumberData(1));
+            nr3 = new Node("type", new NumberData(1));
+            nr4 = new Node("type", new NumberData(1));
+            er1 = new Edge("type", nr1.id, nr2.id);
+            er2 = new Edge("type", nr2.id, nr3.id);
+            er3 = new Edge("type", nr1.id, nr4.id);
+
+        });
+
+        afterEach(function () {
+            ruleGraph = null;
+            nr1       = null;
+            nr2       = null;
+            nr3       = null;
+            nr4       = null;
+            er1       = null;
+            er2       = null;
+            er3       = null;
+            rule      = null;
+        });
+
+        it("should detect overlap between add and delete nodes", function(){
+            const rule = new Rule(G, [nr1.id], [], [nr1.id, nr2.id], [], {}, [], []);
+            assert.throws(()=>{rule._checkNodeTypesDistinct()}, RuleInvalidException);
+        });
+
+        it("should detect overlap between add and delete edges", function(){
+            const rule = new Rule(G, [], [er1.id], [], [er1.id, er2.id], {}, [], []);
+            assert.throws(()=>{rule._checkNodeTypesDistinct()}, RuleInvalidException);
+        });
+
+        it("should detect overlap between nac and delete nodes", function(){
+            const rule = new Rule(G, [], [], [nr1.id, nr2.id], [], {}, [nr3.id, nr1.id], []);
+            assert.throws(()=>{rule._checkNodeTypesDistinct()}, RuleInvalidException);
+        });
+
+        it("should detect overlap between nac and delete edges", function(){
+            const rule = new Rule(G, [], [], [], [er1.id], {}, [], [er1.id]);
+            assert.throws(()=>{rule._checkNodeTypesDistinct()}, RuleInvalidException);
+        });
+
+        it("should not throw if there is no invalid overlaps", function(){
+            const rule = new Rule(G, [nr1.id], [er1.id], [nr2.id], [er2.id], {}, [nr3.id], [er3.id]);
+            assert.doesNotThrow(()=>{rule._checkNodeTypesDistinct()}, RuleInvalidException);
         });
 
     });
