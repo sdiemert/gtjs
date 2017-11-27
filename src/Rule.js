@@ -5,6 +5,14 @@ const Node    = require("./Graph.js").Node;
 const Edge    = require("./Graph.js").Edge;
 const Matcher = require("./Matcher");
 
+/**
+ * @callback RuleExpressionFunction
+ * @param {Graph} host graph
+ * @param {Graph} rule graph
+ * @param {Morphism} matching morphism between rule and host
+ * @param {object} map between local user defined identity into rule graph ids.
+ */
+
 class Rule {
 
     /**
@@ -14,11 +22,12 @@ class Rule {
      * @param addEdges {string[]} an array of edge ids in G that should be added.
      * @param deleteNodes {string[]} an array of node ids that should be deleted.
      * @param deleteEdges {string[]} an array of edge ids that should deleted.
-     * @param exprs {object} [{}] an object indexed by node ids containing functions to call on each node's data field.
-     * @param nacNodes {string[]} [[]]
-     * @param nacEdges {string[]} [[]]
+     * @param exprs {RuleExpressionFunction[]} [{}] an array of functions to call to apply to the graph.
+     * @param nacNodes {string[]} [[]] a list of negative application condition nodes
+     * @param nacEdges {string[]} [[]] a list of negative application condition edges
+     * @param idMap {object} maps user provided names (e.g., "n1") into rule level ids.
      */
-    constructor(G, addNodes, addEdges, deleteNodes, deleteEdges, exprs, nacNodes, nacEdges) {
+    constructor(G, addNodes, addEdges, deleteNodes, deleteEdges, exprs, nacNodes, nacEdges, idMap) {
         this._graph       = G;
         this._addNodes    = addNodes;
         this._addEdges    = addEdges;
@@ -27,6 +36,7 @@ class Rule {
         this._exprs       = exprs || {};
         this._nacNodes    = nacNodes || [];
         this._nacEdges    = nacEdges || [];
+        this._localIdentityMap = idMap || {};
 
         // compute this once so that it can be used
         // multiple times later with no overhead.
@@ -74,9 +84,6 @@ class Rule {
             G.deleteNode(hostNodeId);
         }
 
-        // apply exprs functions to remaining nodes.
-        // TODO: call exprs on each node...
-
         // add in new nodes and edges
         for (let n = 0; n < this._addNodes.length; n++) {
             const newNode                          = this._graph.getNodeById(this._addNodes[n]).clone();
@@ -97,6 +104,10 @@ class Rule {
             newEdge.tar = hostTar;
 
             G.addEdge(newEdge);
+        }
+
+        for(let i = 0; i < this._exprs.length; i++){
+            this._exprs[i](G, this._graph, lhsMorphism, this._localIdentityMap);
         }
 
         return true;
