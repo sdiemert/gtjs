@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "clone": "^1.0.2",
+    "performance-now": "^2.1.0",
     "subgraph-isomorphism": "^1.0.0",
     "uuid": "^3.1.0"
   },

@@ -4,6 +4,7 @@ const Graph   = require("./Graph.js").Graph;
 const Node    = require("./Graph.js").Node;
 const Edge    = require("./Graph.js").Edge;
 const Matcher = require("./Matcher");
+const uuid = require("uuid/v4");
 
 /**
  * @callback RuleExpressionFunction
@@ -57,7 +58,7 @@ class Rule {
 
         if (this._nacNodes.length + this._nacEdges.length <= 0) {
             // find morphism for LHS in G.
-            lhsMorphisms = Matcher.findMorphism(G, this.LHS, null);
+            lhsMorphisms = Matcher.findMorphism(G, this.LHS, 1);
         } else {
             // we have a negative application condition.
             lhsMorphisms = this._getMorphismWithNACs(G);
@@ -86,13 +87,13 @@ class Rule {
 
         // add in new nodes and edges
         for (let n = 0; n < this._addNodes.length; n++) {
-            const newNode                          = this._graph.getNodeById(this._addNodes[n]).clone();
+            const newNode                          = this._graph.getNodeById(this._addNodes[n]).clone(true);
             lhsMorphism.nodeMap[this._addNodes[n]] = newNode.id;
             G.addNode(newNode);
         }
 
         for (let e = 0; e < this._addEdges.length; e++) {
-            const newEdge = this._graph.getEdgeById(this._addEdges[e]).clone();
+            const newEdge = this._graph.getEdgeById(this._addEdges[e]).clone(true);
 
             const ruleSrc = this._graph.getEdgeById(this._addEdges[e]).src;
             const ruleTar = this._graph.getEdgeById(this._addEdges[e]).tar;

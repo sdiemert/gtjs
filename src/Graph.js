@@ -208,11 +208,13 @@ class Node{
      * This clone operation does not generate a new node id.
      * i.e., it copies the existing node's id.
      *
+     * @param unique {boolean} if false will copy exactly including id, otherwise a new id is assigned to the new node.
+     *
      * @return {Node}
      */
-    clone(){
+    clone(unique){
         const n = new Node(this.type, this.data.clone());
-        n._id = this._id;
+        if(!unique) n._id = this._id;
         return n;
     }
 
@@ -259,11 +261,13 @@ class Edge{
      * This clone operates also copies the id of the
      * edge, i.e., a new edge id is not generated.
      *
+     * @param unique {boolean} if false will copy the old nodes id, otherwise will get new id.
+     *
      * @return {Edge}
      */
-    clone(){
+    clone(unique){
         const e = new Edge(this.type, this.src, this.tar);
-        e._id = this._id;
+        if(!unique) e._id = this._id;
         return e;
     }
 
